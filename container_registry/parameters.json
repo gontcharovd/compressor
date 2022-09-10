@@ -3,7 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "registries_compressor_name": {
-            "value": null
-        }
+            "value": "compressorContainerRegistry"
+        },
+				"resourceTags": {
+						"value": {
+								"environment": "qa",
+								"project": "compressor"
+						}
+				}
     }
 }

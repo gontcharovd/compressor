@@ -3,9 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "registries_compressor_name": {
-            "defaultValue": "compressor",
-            "type": "String"
-        }
+            "type": "String",
+						"defaultValue": "someDefaultName"
+        },
+				"resourceTags": {
+						"type": "object",
+						"defaultValue": {
+								"environment": "dev",
+								"project": "compressor"
+						}
+				},
+				"location": {
+				  	"type": "String",
+				  	"defaultValue": "[resourceGroup().location]"
+				}
     },
     "variables": {},
     "resources": [
@@ -13,9 +24,10 @@
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2022-02-01-preview",
             "name": "[parameters('registries_compressor_name')]",
-            "location": "germanywestcentral",
+            "location": "[parameters('location')]",
+						"tags": "[parameters('resourceTags')]",
             "sku": {
-                "name": "Basic",
+              "name": "Basic",
                 "tier": "Basic"
             },
             "properties": {
