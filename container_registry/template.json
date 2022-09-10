@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "registries_compressor_name": {
-            "type": "String",
+            "type": "string",
 						"defaultValue": "someDefaultName"
         },
 				"resourceTags": {
@@ -14,7 +14,7 @@
 						}
 				},
 				"location": {
-				  	"type": "String",
+				  	"type": "string",
 				  	"defaultValue": "[resourceGroup().location]"
 				}
     },

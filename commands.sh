@@ -10,11 +10,11 @@ devParameterFile="./container_registry/parameters.json"
 #   --name myResourceGroup \
 #   --location "West Europe"
 
-az deployment group create \
-  --name $deploymentName \
-  --resource-group $resourceGroup \
-  --template-file $templateFile \
-  --parameters $devParameterFile
+# az deployment group create \
+#   --name $deploymentName \
+#   --resource-group $resourceGroup \
+#   --template-file $templateFile \
+#   --parameters $devParameterFile
 
-# resourcelist=$(az deployment group  show --resource-group $resourceGroup --name $deploymentName --query "properties.outputResources[].id" -o tsv)
-# for resource in $resourcelist; do az resource delete --ids $resource; done
+resourcelist=$(az deployment group  show --resource-group $resourceGroup --name $deploymentName --query "properties.outputResources[].id" -o tsv)
+for resource in $resourcelist; do az resource delete --ids $resource; done
