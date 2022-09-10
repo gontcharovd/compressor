@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 11
+    }
+	},
+  "variables": {},
+  "resources": [
+    {
+      "name": "linkedTemplate",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "./container_registry/template.json"
+        },
+				"parametersLink": {
+          "relativePath": "./container_registry/parameters.json"
+				}
+			}
+    },
+    {
+      "name": "linkedTemplate",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "./container_registry/template.json"
+        },
+				"parametersLink": {
+          "relativePath": "./container_registry/parameters.json"
+				}
+			}
+    }
+  ]
+}

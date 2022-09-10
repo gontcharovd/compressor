@@ -3,9 +3,24 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vaults_compressor_secrets_name": {
-            "defaultValue": "compressor-secrets",
-            "type": "String"
-        }
+            "type": "string"
+        },
+				"resourceTags": {
+						"type": "object",
+						"defaultValue": {
+								"environment": "dev"
+						}
+				},
+				"location": {
+				  	"type": "string",
+				  	"defaultValue": "[resourceGroup().location]"
+				},
+				"objectId": {
+					"type": "string"
+				},
+				"secretsObject": {
+					  "type": "secureObject"
+				}
     },
     "variables": {},
     "resources": [
@@ -13,7 +28,8 @@
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2022-07-01",
             "name": "[parameters('vaults_compressor_secrets_name')]",
-            "location": "germanywestcentral",
+            "location": "[parameters('location')]",
+						"tags": "[parameters('resourceTags')]",
             "properties": {
                 "sku": {
                     "family": "A",
@@ -103,75 +119,20 @@
                 "publicNetworkAccess": "Enabled"
             }
         },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('vaults_compressor_secrets_name'), '/cognite-api-key')]",
-            "location": "germanywestcentral",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('vaults_compressor_secrets_name'), '/cognite-client-name')]",
-            "location": "germanywestcentral",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('vaults_compressor_secrets_name'), '/cognite-project')]",
-            "location": "germanywestcentral",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('vaults_compressor_secrets_name'), '/postgres-password')]",
-            "location": "germanywestcentral",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('vaults_compressor_secrets_name'), '/postgres-user')]",
-            "location": "germanywestcentral",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        }
+				{
+						"type": "Microsoft.KeyVault/vaults/secrets",
+						"copy": {
+								"name": "secrets",
+								"count": "[length(parameters('secretsObject').secrets)]"
+						},
+						"apiVersion": "2022-07-01",
+						"name": "[format('{0}/{1}', parameters('vaults_compressor_secrets_name'), parameters('secretsObject').secrets[copyIndex()].secretName)]",
+						"properties": {
+								"value": "[parameters('secretsObject').secrets[copyIndex()].secretValue]"
+						},
+						"dependsOn": [
+								"[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
+						]
+      }
     ]
 }

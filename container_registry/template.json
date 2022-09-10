@@ -9,8 +9,7 @@
 				"resourceTags": {
 						"type": "object",
 						"defaultValue": {
-								"environment": "dev",
-								"project": "compressor"
+								"environment": "dev"
 						}
 				},
 				"location": {
