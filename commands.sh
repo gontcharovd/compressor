@@ -8,9 +8,9 @@ templateFile="./azure-deploy-compressor-dev.json"
 resourceGroup="compressor"
 deploymentName="compressor-dev"
 
-# az group create \
-#   --name $resourceGroup \
-#   --location "West Europe"
+az group create \
+  --name $resourceGroup \
+  --location "West Europe"
 
 az deployment group create \
   --name $deploymentName \
