@@ -40,20 +40,20 @@ stages:
             ArtifactName: '$(artifactName)'
 
 
-- stage: DeployToTestEnvironment
-  displayName: Deploy to test
-  dependsOn: Publish
+# - stage: DeployToTestEnvironment
+#   displayName: Deploy to test
+#   dependsOn: Publish
 
-  jobs:
-  - deployment: DeploymentJob
-    displayName: Deploy ARM templates
-    pool:
-      vmImage: 'windows-latest'
-    environment: 'test'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+#   jobs:
+#   - deployment: DeploymentJob
+#     displayName: Deploy ARM templates
+#     pool:
+#       vmImage: 'windows-latest'
+#     environment: 'test'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
             # - task: AzureResourceManagerTemplateDeployment@3
             #   displayName: Create a resource group
             #   inputs:
@@ -79,48 +79,48 @@ stages:
             #     azurePowerShellVersion: 'latestVersion'
             #     pwsh: true
 
-            - task: AzureResourceManagerTemplateDeployment@3
-              displayName: Create a storage account for deployment artifacts
-              inputs:
-                deploymentScope: 'Resource Group'
-                ConnectedServiceName: $(connectedServiceName)
-                subscriptionName: $(subscriptionId)
-                action: 'Create Or Update Resource Group'
-                resourceGroupName: '$(resourceGroupName)'
-                location: $(location)
-                templateLocation: 'Linked artifact'
-                csmFile: '$(Agent.BuildDirectory)\$(artifactName)\storage-account-for-artifacts\azuredeploy.json'
-                csmParametersFile: '$(Agent.BuildDirectory)\$(artifactName)\storage-account-for-artifacts\azuredeploy.parameters.json'
-                deploymentMode: 'Incremental'
-                deploymentOutputs: 'armOutputs'
+            # - task: AzureResourceManagerTemplateDeployment@3
+            #   displayName: Create a storage account for deployment artifacts
+            #   inputs:
+            #     deploymentScope: 'Resource Group'
+            #     ConnectedServiceName: $(connectedServiceName)
+            #     subscriptionName: $(subscriptionId)
+            #     action: 'Create Or Update Resource Group'
+            #     resourceGroupName: '$(resourceGroupName)'
+            #     location: $(location)
+            #     templateLocation: 'Linked artifact'
+            #     csmFile: '$(Agent.BuildDirectory)\$(artifactName)\storage-account-for-artifacts\azuredeploy.json'
+            #     csmParametersFile: '$(Agent.BuildDirectory)\$(artifactName)\storage-account-for-artifacts\azuredeploy.parameters.json'
+            #     deploymentMode: 'Incremental'
+            #     deploymentOutputs: 'armOutputs'
 
-            - task: AzurePowerShell@4
-              displayName: Get the storage account and its container names
-              inputs:
-                azureSubscription: $(subscriptionName)
-                scriptType: 'InlineScript'
-                Inline: |
-                  $var=ConvertFrom-Json '$(armOutputs)'
-                  $value=$var.storageAccountName.value
-                  Write-Host "##vso[task.setvariable variable=storageAccountName;]$value"
-                  $value=$var.storageContainerName.value
-                  Write-Host "##vso[task.setvariable variable=storageContainerName;]$value"
-                azurePowerShellVersion: 'latestVersion'
-                pwsh: true
+            # - task: AzurePowerShell@4
+            #   displayName: Get the storage account and its container names
+            #   inputs:
+            #     azureSubscription: $(subscriptionName)
+            #     scriptType: 'InlineScript'
+            #     Inline: |
+            #       $var=ConvertFrom-Json '$(armOutputs)'
+            #       $value=$var.storageAccountName.value
+            #       Write-Host "##vso[task.setvariable variable=storageAccountName;]$value"
+            #       $value=$var.storageContainerName.value
+            #       Write-Host "##vso[task.setvariable variable=storageContainerName;]$value"
+            #     azurePowerShellVersion: 'latestVersion'
+            #     pwsh: true
 
-            - task: AzureFileCopy@3
-              displayName: Copy deployment artifacts to the storage account
-              inputs:
-                sourcePath: '$(Agent.BuildDirectory)\$(artifactName)\linked-templates'
-                azureSubscription: $(subscriptionName)
-                destination: azureBlob
-                storage: $(storageAccountName)
-                containerName: $(storageContainerName)
-                blobPrefix: 'linked-templates'
-                cleanTargetBeforeCopy: true
-                outputStorageUri: artifactsLocation
-                outputStorageContainerSasToken: artifactsLocationSasToken
-                sasTokenTimeOutInMinutes: 30
+            # - task: AzureFileCopy@3
+            #   displayName: Copy deployment artifacts to the storage account
+            #   inputs:
+            #     sourcePath: '$(Agent.BuildDirectory)\$(artifactName)\linked-templates'
+            #     azureSubscription: $(subscriptionName)
+            #     destination: azureBlob
+            #     storage: $(storageAccountName)
+            #     containerName: $(storageContainerName)
+            #     blobPrefix: 'linked-templates'
+            #     cleanTargetBeforeCopy: true
+            #     outputStorageUri: artifactsLocation
+            #     outputStorageContainerSasToken: artifactsLocationSasToken
+            #     sasTokenTimeOutInMinutes: 30
 
             # - task: AzureResourceManagerTemplateDeployment@3
             #   displayName: Deploy resources to the resource group
