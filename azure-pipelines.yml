@@ -58,7 +58,7 @@ stages:
             #   displayName: Create a resource group
             #   inputs:
             #     deploymentScope: 'Subscription'
-            #     ConnectedServiceName: $(subscriptionName)
+            #     ConnectedServiceName: $(connectedServiceName)
             #     subscriptionName: $(subscriptionId)
             #     location: $(location)
             #     templateLocation: 'Linked artifact'
@@ -83,7 +83,7 @@ stages:
               displayName: Create a storage account for deployment artifacts
               inputs:
                 deploymentScope: 'Resource Group'
-                ConnectedServiceName: $(subscriptionName)
+                ConnectedServiceName: $(connectedServiceName)
                 subscriptionName: $(subscriptionId)
                 action: 'Create Or Update Resource Group'
                 resourceGroupName: '$(resourceGroupName)'
@@ -126,7 +126,7 @@ stages:
             #   displayName: Deploy resources to the resource group
             #   inputs:
             #     deploymentScope: 'Resource Group'
-            #     ConnectedServiceName: $(subscriptionName)
+            #     ConnectedServiceName: $(connectedServiceName)
             #     subscriptionName: $(subscriptionId)
             #     action: 'Create Or Update Resource Group'
             #     resourceGroupName: '$(resourceGroupName)'
