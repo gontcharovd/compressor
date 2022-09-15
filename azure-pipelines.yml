@@ -70,7 +70,7 @@ stages:
             - task: AzurePowerShell@4
               displayName: Get the resource group name
               inputs:
-                azureSubscription: $(subscriptionName)
+                ConnectedServiceName: $(connectedServiceName)
                 scriptType: 'InlineScript'
                 Inline: |
                   $var=ConvertFrom-Json '$(armOutputs)'
