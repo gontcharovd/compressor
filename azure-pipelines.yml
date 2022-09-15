@@ -94,19 +94,19 @@ stages:
                 deploymentMode: 'Incremental'
                 deploymentOutputs: 'armOutputs'
 
-            - task: AzurePowerShell@4
-              displayName: Get the storage account and its container names
-              inputs:
-                azureSubscription: $(subscriptionName)
-                scriptType: 'InlineScript'
-                Inline: |
-                  $var=ConvertFrom-Json '$(armOutputs)'
-                  $value=$var.storageAccountName.value
-                  Write-Host "##vso[task.setvariable variable=storageAccountName;]$value"
-                  $value=$var.storageContainerName.value
-                  Write-Host "##vso[task.setvariable variable=storageContainerName;]$value"
-                azurePowerShellVersion: 'latestVersion'
-                pwsh: true
+            # - task: AzurePowerShell@4
+            #   displayName: Get the storage account and its container names
+            #   inputs:
+            #     azureSubscription: $(subscriptionName)
+            #     scriptType: 'InlineScript'
+            #     Inline: |
+            #       $var=ConvertFrom-Json '$(armOutputs)'
+            #       $value=$var.storageAccountName.value
+            #       Write-Host "##vso[task.setvariable variable=storageAccountName;]$value"
+            #       $value=$var.storageContainerName.value
+            #       Write-Host "##vso[task.setvariable variable=storageContainerName;]$value"
+            #     azurePowerShellVersion: 'latestVersion'
+            #     pwsh: true
 
             # - task: AzureFileCopy@3
             #   displayName: Copy deployment artifacts to the storage account
