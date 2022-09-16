@@ -108,19 +108,19 @@ stages:
                 azurePowerShellVersion: 'latestVersion'
                 pwsh: true
 
-            # - task: AzureFileCopy@3
-            #   displayName: Copy deployment artifacts to the storage account
-            #   inputs:
-            #     sourcePath: '$(Agent.BuildDirectory)\$(artifactName)\linked-templates'
-            #     azureSubscription: $(subscriptionName)
-            #     destination: azureBlob
-            #     storage: $(storageAccountName)
-            #     containerName: $(storageContainerName)
-            #     blobPrefix: 'linked-templates'
-            #     cleanTargetBeforeCopy: true
-            #     outputStorageUri: artifactsLocation
-            #     outputStorageContainerSasToken: artifactsLocationSasToken
-            #     sasTokenTimeOutInMinutes: 30
+            - task: AzureFileCopy@3
+              displayName: Copy deployment artifacts to the storage account
+              inputs:
+                sourcePath: '$(Agent.BuildDirectory)\$(artifactName)\linked-templates'
+                azureSubscription: $(subscriptionName)
+                destination: azureBlob
+                storage: $(storageAccountName)
+                containerName: $(storageContainerName)
+                blobPrefix: 'linked-templates'
+                cleanTargetBeforeCopy: true
+                outputStorageUri: artifactsLocation
+                outputStorageContainerSasToken: artifactsLocationSasToken
+                sasTokenTimeOutInMinutes: 30
 
             # - task: AzureResourceManagerTemplateDeployment@3
             #   displayName: Deploy resources to the resource group
