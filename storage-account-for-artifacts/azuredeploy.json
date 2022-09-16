@@ -5,8 +5,8 @@
         "storageAccountPrefix": {
             "type": "string",
             "metadata": {
-                "description": "Prefix to be used in storage account name.",
-                "displayName": "Account name prefix"
+                "description": "Storage account name.",
+                "displayName": "Storage account name."
             },
             "defaultValue": "deploy",
             "maxLength": 11

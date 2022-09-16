@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "applicationPrefix": {
-            "value": "linkedarm"
+            "value": "compressor"
         },
         "location": {
             "value": "West Europe"
