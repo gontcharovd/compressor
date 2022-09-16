@@ -122,18 +122,18 @@ stages:
                 outputStorageContainerSasToken: artifactsLocationSasToken
                 sasTokenTimeOutInMinutes: 30
 
-            # - task: AzureResourceManagerTemplateDeployment@3
-            #   displayName: Deploy resources to the resource group
-            #   inputs:
-            #     deploymentScope: 'Resource Group'
-            #     ConnectedServiceName: $(connectedServiceName)
-            #     subscriptionName: $(subscriptionId)
-            #     action: 'Create Or Update Resource Group'
-            #     resourceGroupName: '$(resourceGroupName)'
-            #     location: $(location)
-            #     templateLocation: 'Linked artifact'
-            #     csmFile: '$(Agent.BuildDirectory)\$(artifactName)\main-template\azuredeploy.json'
-            #     csmParametersFile: '$(Agent.BuildDirectory)\$(artifactName)\main-template\azuredeploy.parameters.json'
-            #     overrideParameters: '-_artifactsLocation $(artifactsLocation) -_artifactsLocationSasToken $(artifactsLocationSasToken)'
-            #     deploymentMode: 'Incremental'
-            #     deploymentOutputs: 'armOutputs'
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: Deploy resources to the resource group
+              inputs:
+                deploymentScope: 'Resource Group'
+                ConnectedServiceName: $(connectedServiceName)
+                subscriptionName: $(subscriptionId)
+                action: 'Create Or Update Resource Group'
+                resourceGroupName: '$(resourceGroupName)'
+                location: $(location)
+                templateLocation: 'Linked artifact'
+                csmFile: '$(Agent.BuildDirectory)\$(artifactName)\main-template\azuredeploy.json'
+                csmParametersFile: '$(Agent.BuildDirectory)\$(artifactName)\main-template\azuredeploy.parameters.json'
+                overrideParameters: '-_artifactsLocation $(artifactsLocation) -_artifactsLocationSasToken $(artifactsLocationSasToken)'
+                deploymentMode: 'Incremental'
+                deploymentOutputs: 'armOutputs'
