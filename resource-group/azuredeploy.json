@@ -18,7 +18,7 @@
         }
     },
     "variables": {
-        "resourceGroupName": "[parameters('applicationPrefix')]"
+        "resourceGroupName": "[concat(parameters('applicationPrefix'), '-rg-', uniqueString(subscription().Id))]"
     },
     "resources": [
         {
