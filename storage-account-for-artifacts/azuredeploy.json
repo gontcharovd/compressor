@@ -9,7 +9,7 @@
                 "displayName": "Account name prefix"
             },
             "defaultValue": "deploy",
-            "maxLength": 80
+            "maxLength": 11
         },
         "location": {
             "type": "string",
