@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vaults_compressor_secrets_name": {
-            "value": "compressor-key-vault"
+            "value": "keyVault"
         }
     }
 }
