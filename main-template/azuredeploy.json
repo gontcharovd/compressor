@@ -53,7 +53,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
-            "name": "containerRegistryDeployment",
+            "name": "keyVaultDeployment",
             "resourceGroup": "[resourceGroup().name]",
             "properties": {
                 "mode": "Incremental",
