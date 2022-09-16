@@ -112,7 +112,7 @@ stages:
               displayName: Copy deployment artifacts to the storage account
               inputs:
                 sourcePath: '$(Agent.BuildDirectory)\$(artifactName)\linked-templates'
-                azureSubscription: $(subscriptionName)
+                ConnectedServiceNameARM: $(connectedServiceName)
                 destination: azureBlob
                 storage: $(storageAccountName)
                 containerName: $(storageContainerName)
