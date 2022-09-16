@@ -24,10 +24,12 @@
     },
     "variables": {
         "linkedTemplates": {
-            "containerRegistry": "[concat(parameters('_artifactsLocation'), 'linked-templates/container-registry/azuredeploy.json', parameters('_artifactsLocationSasToken'))]"
+            "containerRegistry": "[concat(parameters('_artifactsLocation'), 'linked-templates/container-registry/azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+            "keyVault": "[concat(parameters('_artifactsLocation'), 'linked-templates/key-vault/azuredeploy.json', parameters('_artifactsLocationSasToken'))]"
         },
         "linkedTemplatesParameters": {
-            "containerRegistry": "[concat(parameters('_artifactsLocation'), 'linked-templates/container-registry/azuredeploy.parameters.json', parameters('_artifactsLocationSasToken'))]"
+            "containerRegistry": "[concat(parameters('_artifactsLocation'), 'linked-templates/container-registry/azuredeploy.parameters.json', parameters('_artifactsLocationSasToken'))]",
+            "keyVault": "[concat(parameters('_artifactsLocation'), 'linked-templates/key-vault/azuredeploy.parameters.json', parameters('_artifactsLocationSasToken'))]"
         }
     },
     "resources": [
@@ -44,6 +46,23 @@
                 },
                 "parametersLink": {
                     "uri": "[variables('linkedTemplatesParameters').containerRegistry]",
+                    "contentVersion": "1.0.0.0"
+				}
+			}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "containerRegistryDeployment",
+            "resourceGroup": "[resourceGroup().name]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('linkedTemplates').keyVault]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri": "[variables('linkedTemplatesParameters').keyVault]",
                     "contentVersion": "1.0.0.0"
 				}
 			}
