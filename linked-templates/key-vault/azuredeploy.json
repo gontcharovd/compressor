@@ -3,24 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vaults_compressor_secrets_name": {
-            "type": "string"
+            "defaultValue": "compressor-secrets",
+            "type": "String"
         },
-				"resourceTags": {
-						"type": "object",
-						"defaultValue": {
-								"environment": "dev"
-						}
-				},
-				"location": {
-				  	"type": "string",
-				  	"defaultValue": "[resourceGroup().location]"
-				},
-				"objectId": {
-					"type": "string"
-				},
-				"secretsObject": {
-					  "type": "secureObject"
-				}
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        }
     },
     "variables": {},
     "resources": [
@@ -29,7 +18,6 @@
             "apiVersion": "2022-07-01",
             "name": "[parameters('vaults_compressor_secrets_name')]",
             "location": "[parameters('location')]",
-						"tags": "[parameters('resourceTags')]",
             "properties": {
                 "sku": {
                     "family": "A",
@@ -118,21 +106,6 @@
                 "provisioningState": "Succeeded",
                 "publicNetworkAccess": "Enabled"
             }
-        },
-				{
-						"type": "Microsoft.KeyVault/vaults/secrets",
-						"copy": {
-								"name": "secrets",
-								"count": "[length(parameters('secretsObject').secrets)]"
-						},
-						"apiVersion": "2022-07-01",
-						"name": "[format('{0}/{1}', parameters('vaults_compressor_secrets_name'), parameters('secretsObject').secrets[copyIndex()].secretName)]",
-						"properties": {
-								"value": "[parameters('secretsObject').secrets[copyIndex()].secretValue]"
-						},
-						"dependsOn": [
-								"[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_compressor_secrets_name'))]"
-						]
-      }
+        }
     ]
 }

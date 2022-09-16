@@ -137,3 +137,6 @@ stages:
                 overrideParameters: '-_artifactsLocation $(artifactsLocation) -_artifactsLocationSasToken $(artifactsLocationSasToken)'
                 deploymentMode: 'Incremental'
                 deploymentOutputs: 'armOutputs'
+              env:
+                POSTGRES_USER: $(postgres-user)
+                POSTGRES_PASSWORD: $(postgres-password)
