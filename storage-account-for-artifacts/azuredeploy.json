@@ -52,7 +52,7 @@
         }
     },
     "variables": {
-        "storageAccountName": "[concat(toLower(parameters('storageAccountPrefix')), uniqueString(resourceGroup().Id))]",
+        "storageAccountName": "[concat(toLower(parameters('storageAccountPrefix')), '-', uniqueString(resourceGroup().Id))]",
         "blobEndPoint": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net/')]"
     },
     "resources": [
