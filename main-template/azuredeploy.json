@@ -2,13 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        // "applicationPrefix": {
-        //     "type": "string",
-        //     "metadata": {
-        //         "description": "Prefix to use when creating the resources in this deployment."
-        //     },
-        //     "maxLength": 11
-        // },
+        "applicationPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Prefix to use when creating the resources in this deployment."
+            },
+            "maxLength": 11
+        },
         "_artifactsLocation": {
             "type": "string",
             "metadata": {
@@ -23,8 +23,6 @@
         }
     },
     "variables": {
-        // "containerRegistryName": "[concat(parameters('applicationPrefix'), '-cr-', uniqueString(resourceGroup().Id))]",
-
         "linkedTemplates": {
             "containerRegistry": "[concat(parameters('_artifactsLocation'), 'linked-templates/container-registry/azuredeploy.json', parameters('_artifactsLocationSasToken'))]"
         },
