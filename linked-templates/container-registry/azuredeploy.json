@@ -4,18 +4,18 @@
     "parameters": {
         "registries_compressor_name": {
             "type": "string",
-						"defaultValue": "someDefaultName"
+            "defaultValue": "someDefaultName"
         },
-				"resourceTags": {
-						"type": "object",
-						"defaultValue": {
-								"environment": "dev"
-						}
-				},
-				"location": {
-				  	"type": "string",
-				  	"defaultValue": "[resourceGroup().location]"
-				}
+        "resourceTags": {
+                "type": "object",
+                "defaultValue": {
+                        "environment": "dev"
+                }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        }
     },
     "variables": {},
     "resources": [

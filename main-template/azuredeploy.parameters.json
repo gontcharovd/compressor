@@ -5,18 +5,6 @@
         "applicationPrefix": {
             "value": "compressor"
         },
-        "functionAppRuntimeStack": {
-            "value": "dotnet"
-        },
-        "functionAppTimeZone": {
-            "value": "Central Europe Standard Time"
-        },
-        "logAnalyticsWorkspaceSKU": {
-            "value": "Free"
-        },
-        "serviceBusNamespaceSKU": {
-            "value": "Basic"
-        },
         "_artifactsLocation": {
             "value": ""
         },
