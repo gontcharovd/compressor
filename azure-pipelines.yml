@@ -6,7 +6,7 @@ name: Deploy Bicep files
 variables:
   vmImageName: 'ubuntu-latest'
   azureServiceConnection: 'azure-rm-service-connection'
-  resourceGroupName: 'compressorResourceGroup'
+  resourceGroupName: 'compressor'
   templateFile: './main-template/main.bicep'
 
 pool:
