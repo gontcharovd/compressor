@@ -1,4 +1,4 @@
-param name string
+param name string = 'defaultName'
 param location string
 targetScope = 'subscription'
 
