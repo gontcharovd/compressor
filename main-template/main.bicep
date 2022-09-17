@@ -1,10 +1,12 @@
-param location string = 'Europe West'
+param name string = 'compressor-rg-main'
+param location string = 'westeurope'
 
 targetScope = 'subscription'
 
 module resourceGroupModule '../resource-group/azuredeploy.bicep' = {
   name: 'linkedDeployment'
   params: {
-    location: location
+   location: location
+   name: name
   }
 }
