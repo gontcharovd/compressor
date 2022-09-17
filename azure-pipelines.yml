@@ -19,6 +19,7 @@ steps:
     deploymentScope: 'Resource Group'
     azureResourceManagerConnection: '$(azureServiceConnection)'
     action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
     location: '$(location)'
     templateLocation: 'Linked artifact'
     csmFile: '$(templateFile)'
