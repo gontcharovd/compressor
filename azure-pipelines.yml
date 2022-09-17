@@ -1,142 +1,28 @@
-# Pipeline to validate and deploy ARM templates
-
 trigger:
-  branches:
-    include:
-    - main
-  paths:
-    exclude:
-    - README.md
+- master
+
+name: Deploy Bicep files
 
 variables:
-  # Deployment location
-  location: 'West Europe'
-  # Artifact name
-  # artifactName: 'compressor-artifact'
+  vmImageName: 'ubuntu-latest'
 
-stages:
+  azureServiceConnection: 'azure-rm-service-connection'
+  resourceGroupName: 'exampleRG'
+  location: 'Europe West'
+  templateFile: './main-template/main.bicep'
+pool:
+  vmImage: $(vmImageName)
 
-# - stage: Publish
-#   displayName: Publish
-
-#   jobs:
-#     - job: PublishdJob
-#       displayName: Copy and Publish Artifacts
-#       pool:
-#         vmImage: 'windows-latest'
-
-#       steps:
-#         - task: CopyFiles@2
-#           displayName: Copy files
-#           inputs:
-#             SourceFolder: '$(Build.SourcesDirectory)'
-#             Contents: '**'
-#             TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-#         - task: PublishBuildArtifacts@1
-#           displayName:  Publish build artifacts
-#           inputs:
-#             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#             ArtifactName: '$(artifactName)'
-
-
-- stage: DeployToTestEnvironment
-  displayName: Deploy to test
-  # dependsOn: Publish
-
-  jobs:
-  - deployment: DeploymentJob
-    displayName: Deploy Bicep templates
-    pool:
-      vmImage: 'windows-latest'
-    environment: 'test'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-            - task: AzureResourceManagerTemplateDeployment@3
-              displayName: Create a resource group
-              inputs:
-                deploymentScope: 'Resource Group'
-                azureResourceManagerConnection: '$(connectedServiceName)'
-                action: 'Create Or Update Resource Group'
-                resourceGroupName: '$(resourceGroupName)'
-                location: '$(location)'
-                templateLocation: 'Linked artifact'
-                csmFile: ./main-template/main.bicep'
-                deploymentMode: 'Incremental'
-                deploymentName: 'DeployPipelineTemplate'
-
-            # - task: AzurePowerShell@4
-            #   displayName: Get the resource group name
-            #   inputs:
-            #     ConnectedServiceNameARM: $(connectedServiceName)
-            #     scriptType: 'InlineScript'
-            #     Inline: |
-            #       $var=ConvertFrom-Json '$(armOutputs)'
-            #       $value=$var.resourceGroupName.value
-            #       Write-Host "##vso[task.setvariable variable=resourceGroupName;]$value"
-            #     azurePowerShellVersion: 'latestVersion'
-            #     pwsh: true
-
-            # - task: AzureResourceManagerTemplateDeployment@3
-            #   displayName: Create a storage account for deployment artifacts
-            #   inputs:
-            #     deploymentScope: 'Resource Group'
-            #     ConnectedServiceName: $(connectedServiceName)
-            #     subscriptionName: $(subscriptionId)
-            #     action: 'Create Or Update Resource Group'
-            #     resourceGroupName: '$(resourceGroupName)'
-            #     location: $(location)
-            #     templateLocation: 'Linked artifact'
-            #     csmFile: '$(Agent.BuildDirectory)\$(artifactName)\storage-account-for-artifacts\azuredeploy.json'
-            #     csmParametersFile: '$(Agent.BuildDirectory)\$(artifactName)\storage-account-for-artifacts\azuredeploy.parameters.json'
-            #     deploymentMode: 'Incremental'
-            #     deploymentOutputs: 'armOutputs'
-
-            # - task: AzurePowerShell@4
-            #   displayName: Get the storage account and its container names
-            #   inputs:
-            #     ConnectedServiceNameARM: $(connectedServiceName)
-            #     scriptType: 'InlineScript'
-            #     Inline: |
-            #       $var=ConvertFrom-Json '$(armOutputs)'
-            #       $value=$var.storageAccountName.value
-            #       Write-Host "##vso[task.setvariable variable=storageAccountName;]$value"
-            #       $value=$var.storageContainerName.value
-            #       Write-Host "##vso[task.setvariable variable=storageContainerName;]$value"
-            #     azurePowerShellVersion: 'latestVersion'
-            #     pwsh: true
-
-            # - task: AzureFileCopy@3
-            #   displayName: Copy deployment artifacts to the storage account
-            #   inputs:
-            #     sourcePath: '$(Agent.BuildDirectory)\$(artifactName)\linked-templates'
-            #     ConnectedServiceNameARM: $(connectedServiceName)
-            #     destination: azureBlob
-            #     storage: $(storageAccountName)
-            #     containerName: $(storageContainerName)
-            #     blobPrefix: 'linked-templates'
-            #     cleanTargetBeforeCopy: true
-            #     outputStorageUri: artifactsLocation
-            #     outputStorageContainerSasToken: artifactsLocationSasToken
-            #     sasTokenTimeOutInMinutes: 30
-
-            # - task: AzureResourceManagerTemplateDeployment@3
-            #   displayName: Deploy resources to the resource group
-            #   inputs:
-            #     deploymentScope: 'Resource Group'
-            #     ConnectedServiceName: $(connectedServiceName)
-            #     subscriptionName: $(subscriptionId)
-            #     action: 'Create Or Update Resource Group'
-            #     resourceGroupName: '$(resourceGroupName)'
-            #     location: $(location)
-            #     templateLocation: 'Linked artifact'
-            #     csmFile: '$(Agent.BuildDirectory)\$(artifactName)\main-template\azuredeploy.json'
-            #     csmParametersFile: '$(Agent.BuildDirectory)\$(artifactName)\main-template\azuredeploy.parameters.json'
-            #     overrideParameters: '-_artifactsLocation $(artifactsLocation) -_artifactsLocationSasToken $(artifactsLocationSasToken)'
-            #     deploymentMode: 'Incremental'
-            #     deploymentOutputs: 'armOutputs'
-            #   env:
-            #     POSTGRES_USER: $(postgres-user)
-            #     POSTGRES_PASSWORD: $(postgres-password)
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(azureServiceConnection)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(templateFile)'
+    overrideParameters: '-storageAccountType Standard_LRS'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
