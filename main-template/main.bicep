@@ -5,7 +5,7 @@ targetScope = 'subscription'
 module resourceGroupModule '../resource-group/azuredeploy.bicep' = {
   name: 'linkedDeployment'
   params: {
-    name: 'compressorResourceGroup'
+    name: 'compressor'
     location: location
   }
 }
