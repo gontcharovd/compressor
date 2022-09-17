@@ -8,6 +8,7 @@ variables:
   azureServiceConnection: 'azure-rm-service-connection'
   resourceGroupName: 'compressor'
   templateFile: './main-template/main.bicep'
+  location: 'westeurope'
 
 pool:
   vmImage: $(vmImageName)
