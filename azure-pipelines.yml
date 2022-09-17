@@ -49,7 +49,7 @@ stages:
     displayName: Deploy ARM templates
     pool:
       vmImage: 'windows-latest'
-    environment: 'dev'
+    environment: 'test'
     strategy:
       runOnce:
         deploy:
