@@ -46,7 +46,7 @@ stages:
 
   jobs:
   - deployment: DeploymentJob
-    displayName: Deploy ARM templates
+    displayName: Deploy Bicep templates
     pool:
       vmImage: 'windows-latest'
     environment: 'test'
@@ -57,15 +57,15 @@ stages:
             - task: AzureResourceManagerTemplateDeployment@3
               displayName: Create a resource group
               inputs:
-                deploymentScope: 'Subscription'
-                ConnectedServiceName: $(connectedServiceName)
-                subscriptionName: $(subscriptionId)
-                location: $(location)
-                # templateLocation: 'Linked artifact'
-                csmFile: resource-group\azuredeploy.bicep'
-                csmParametersFile: resource-group\azuredeploy.parameters.json'
+                deploymentScope: 'Resource Group'
+                azureResourceManagerConnection: '$(connectedServiceName)'
+                action: 'Create Or Update Resource Group'
+                resourceGroupName: '$(resourceGroupName)'
+                location: '$(location)'
+                templateLocation: 'Linked artifact'
+                csmFile: ./main-template/main.bicep'
                 deploymentMode: 'Incremental'
-                deploymentOutputs: 'armOutputs'
+                deploymentName: 'DeployPipelineTemplate'
 
             # - task: AzurePowerShell@4
             #   displayName: Get the resource group name
