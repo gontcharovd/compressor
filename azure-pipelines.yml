@@ -9,7 +9,8 @@ variables:
   azureServiceConnection: 'azure-rm-service-connection'
   resourceGroupName: 'exampleRG'
   location: 'westeurope'
-  templateFile: './main-template/main.bicep'
+  templateFile: './resource-group/azuredeploy.bicep'
+  # templateFile: './main-template/main.bicep'
 pool:
   vmImage: $(vmImageName)
 

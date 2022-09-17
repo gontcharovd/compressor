@@ -4,7 +4,7 @@ param location string = 'westeurope'
 targetScope = 'subscription'
 
 module resourceGroupModule '../resource-group/azuredeploy.bicep' = {
-  name: 'linkedDeployment'
+  name: 'deployResourceGroup'
   params: {
    location: location
    name: name
