@@ -1,14 +1,9 @@
-@minLength(3)
-@maxLength(24)
-@description('Name of the container registry')
-param name string
-param resourceTag object
-param location string = resourceGroup().location
+param containerRegistryName string
+param location string
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
-  name: name
+  name: containerRegistryName
   location: location
-  tags: resourceTag
   sku: {
     name: 'Basic'
   }

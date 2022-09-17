@@ -1,12 +1,19 @@
-param name string = 'compressor-rg-main'
-param location string = 'westeurope'
+param containerRegistryName string = 'containterRegistry${uniqueString(resourceGroup().id)}'
+param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
+param location string = resourceGroup().location
 
-targetScope = 'subscription'
+module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
+  name: 'containerRegistry'
+  params:{
+    containerRegistryName: containerRegistryName
+    location: location
+  }
+}
 
-module resourceGroupModule '../resource-group/azuredeploy.bicep' = {
-  name: 'deployResourceGroup'
+module keyVault '../linked-templates/key-vault/azuredeploy.bicep' = {
+  name: 'keyVault'
   params: {
-   location: location
-   name: name
+    location: location
+    keyVaultName: keyVaultName
   }
 }

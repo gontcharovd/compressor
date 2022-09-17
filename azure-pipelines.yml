@@ -5,12 +5,10 @@ name: Deploy Bicep files
 
 variables:
   vmImageName: 'ubuntu-latest'
-
   azureServiceConnection: 'azure-rm-service-connection'
-  resourceGroupName: 'exampleRG'
-  location: 'westeurope'
-  templateFile: './resource-group/azuredeploy.bicep'
-  # templateFile: './main-template/main.bicep'
+  resourceGroupName: 'compressorResourceGroup'
+  templateFile: './main-template/main.bicep'
+
 pool:
   vmImage: $(vmImageName)
 
