@@ -1,8 +1,7 @@
-param name string
 param location string
 targetScope = 'subscription'
 
 resource compressorRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: name
+  name: 'myresourcegroup1234'
   location: location
 }
