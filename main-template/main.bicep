@@ -2,7 +2,7 @@ param containerRegistryName string = 'containterRegistry${uniqueString(resourceG
 param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
 param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
 param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
-param postgresDatabaseName string = 'postgresDatabase${uniqueString(resourceGroup().id)}'
+param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
 
 module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
@@ -39,11 +39,11 @@ module webApp '../linked-templates/web-app/azuredeploy.bicep' = {
   }
 }
 
-// module postgresDatabase '../linked-templates/postgres-database/azuredeploy.bicep' = {
-//   name: 'postgresDatabase'
-//   params: {
-//     location: location 
-//     administratorLogin: 'gontcharovd' 
-//     postgresDatabaseName: postgresDatabaseName
-//   }
-// }
+module postgresDatabase '../linked-templates/postgres-database/azuredeploy.bicep' = {
+  name: 'postgresDatabase'
+  params: {
+    location: location 
+    administratorLogin: 'gontcharovd' 
+    postgresDatabaseName: postgresDatabaseName
+  }
+}
