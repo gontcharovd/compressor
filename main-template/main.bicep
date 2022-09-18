@@ -1,7 +1,7 @@
 param containerRegistryName string = 'containterRegistry${uniqueString(resourceGroup().id)}'
-param webAppName string = uniqueString(resourceGroup().id)
 param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
-param appName string = 'functionApp${uniqueString(resourceGroup().id)}'
+param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
+param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
 
 module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
@@ -25,7 +25,7 @@ module functionApp '../linked-templates/function-app/azuredeploy.bicep' = {
   params: {
     location: location
     appInsightsLocation: location
-    appName: appName
+    appName: functionAppName
   }
 }
 
