@@ -2,8 +2,21 @@ param containerRegistryName string = 'containterRegistry${uniqueString(resourceG
 param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
 param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
 param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
+@description('Postgres database name must be lowercase.')
 param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
+
+// secrets
+@secure()
+param cogniteApiKeyValue string
+@secure()
+param cogniteProjectValue string
+@secure()
+param cogniteClientValue string
+@secure()
+param postgresUserValue string
+@secure()
+param postgresPasswordValue string
 
 module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
@@ -18,6 +31,11 @@ module keyVault '../linked-templates/key-vault/azuredeploy.bicep' = {
   params: {
     location: location
     keyVaultName: keyVaultName
+    cogniteApiKeyValue: cogniteApiKeyValue
+    cogniteClientValue: cogniteClientValue
+    cogniteProjectValue: cogniteProjectValue
+    postgresUserValue: postgresUserValue
+    postgresPasswordValue: postgresPasswordValue
   }
 }
 
