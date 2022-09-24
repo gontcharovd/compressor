@@ -1,4 +1,3 @@
-param administratorLogin string
 param location string
 param postgresDatabaseName string
 param serverEdition string = 'GeneralPurpose'
@@ -11,7 +10,10 @@ param virtualNetworkExternalId string = ''
 param subnetName string = ''
 param privateDnsZoneArmResourceId string = ''
 
-var administratorLoginPassword = uniqueString(resourceGroup().id)
+@secure()
+param administratorLogin string
+@secure()
+param administratorLoginPassword string
 
 resource postgresDatabase 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
   name: postgresDatabaseName
