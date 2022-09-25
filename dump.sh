@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export $(grep -v '^#' secrets.env | xargs -0)
 pg_dump -Fc \
     --host=compressor-data.postgres.database.azure.com \
     --username=gontcharovd \
