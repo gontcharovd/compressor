@@ -12,7 +12,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
 
 module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
-  params:{
+  params: {
     containerRegistryName: containerRegistryName
     location: location
   }
@@ -39,7 +39,7 @@ module webApp '../linked-templates/web-app/azuredeploy.bicep' = {
 module postgresDatabase '../linked-templates/postgres-database/azuredeploy.bicep' = {
   name: 'postgresDatabase'
   params: {
-    location: location 
+    location: location
     administratorLogin: keyVault.getSecret('postgresUser')
     administratorLoginPassword: keyVault.getSecret('postgresPassword')
     postgresDatabaseName: postgresDatabaseName

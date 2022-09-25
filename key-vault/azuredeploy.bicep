@@ -12,7 +12,7 @@ param postgresUserValue string
 param postgresPasswordValue string
 
 @description('Specifies whether Azure Virtual Machines are permitted to retrieve certificates stored as secrets from the key vault.')
-param enabledForDeployment bool = false 
+param enabledForDeployment bool = false
 
 @description('Specifies whether Azure Disk Encryption is permitted to retrieve secrets from the vault and unwrap keys.')
 param enabledForDiskEncryption bool = false
@@ -56,7 +56,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
 }
 
 resource cogniteApiKey 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  parent:keyVault
+  parent: keyVault
   name: 'cogniteApiKey'
   properties: {
     value: cogniteApiKeyValue
@@ -64,7 +64,7 @@ resource cogniteApiKey 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = 
 }
 
 resource cogniteProject 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  parent:keyVault
+  parent: keyVault
   name: 'cogiteProject'
   properties: {
     value: cogniteProjectValue
@@ -72,7 +72,7 @@ resource cogniteProject 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' =
 }
 
 resource cogniteClient 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  parent:keyVault
+  parent: keyVault
   name: 'cogniteClient'
   properties: {
     value: cogniteClientValue
@@ -80,7 +80,7 @@ resource cogniteClient 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = 
 }
 
 resource postgresUser 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  parent:keyVault
+  parent: keyVault
   name: 'postgresUser'
   properties: {
     value: postgresUserValue
@@ -88,7 +88,7 @@ resource postgresUser 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 }
 
 resource postgresPassword 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  parent:keyVault
+  parent: keyVault
   name: 'postgresPassword'
   properties: {
     value: postgresPasswordValue
