@@ -1,25 +1,38 @@
 param location string = resourceGroup().location
 param subscriptionId string = subscription().id
-param resourceGroup string = 'compressorManagedIdentity'
-param keyVaultName string
+param resourceGroupName string = 'compressorManagedIdentity'
+param storageAccountName string = 'compressormi'
+param currentTime string = utcNow()
+// param keyVaultName string
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
   name: 'compressor-managed-identity'
+  scope: resourceGroup(subscriptionId, resourceGroupName)
 }
 
-// https://www.youtube.com/watch?v=c4hTBTWyA_w
 resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
   name: 'restoreDatabaseDump'
   location: location
   kind: 'AzureCLI'
+  // identity: {
+  //   type: 'UserAssigned'
+  //   userAssignedIdentities: {
+  //     '${managedIdentity.id}': {}
+  //   }
+  // }
   properties: {
     azCliVersion: '2.37.0'
     retentionInterval: 'P1D'
-    arguments: '-keyVaultName ${keyVaultName}'
+    arguments: '-storageAccountName ${storageAccountName}'
+    cleanupPreference: 'OnSuccess'
+    forceUpdateTag: currentTime
     scriptContent: '''
-      #param([string] $keyVaultName)
+      #param([string] $storageAccountName)
+      #az login --identity
       #export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
-      echo $keyVaultName
+      #$DeploymentScriptOutputs["outputs"] = az storage blob list -c postgres-database-dump --acount-name $storageAccountName --query "[0].name"
+      #$DeploymentScriptOutputs["output"] = "hallo"
+      echo hallo
     '''
   }
 }
