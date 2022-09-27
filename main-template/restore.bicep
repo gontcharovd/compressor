@@ -1,5 +1,11 @@
 param location string = resourceGroup().location
+param subscriptionId string = subscription().id
+param resourceGroup string = 'compressorManagedIdentity'
 param keyVaultName string
+
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
+  name: 'compressor-managed-identity'
+}
 
 // https://www.youtube.com/watch?v=c4hTBTWyA_w
 resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
