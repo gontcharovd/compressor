@@ -5,4 +5,4 @@
 storageAccountName="compressormi"
 blob_name=$(az storage blob list --container-name postgres-database-dump --account-name $storageAccountName --query [0].name)
 AZ_SCRIPTS_OUTPUT_PATH="./output.json"
-echo '{"result":' $blob_name'}' > $AZ_SCRIPTS_OUTPUT_PATH
+echo '{"result":' '"'$blob_name'"}' > $AZ_SCRIPTS_OUTPUT_PATH
