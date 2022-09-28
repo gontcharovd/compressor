@@ -30,7 +30,9 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
       az login --identity
       #export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
       blob_name=$(az storage blob list --container-name postgres-database-dump --account-name $storageAccountName --query [0].name)
-      echo '{"result":' '"'$blob_name'"}' > $AZ_SCRIPTS_OUTPUT_PATH
+      blob_name="alfred"
+      echo "blob name: ${blob_name}"
+      jq -n --arg blob $blob_name '{ "result": $blob }' | tee $AZ_SCRIPTS_OUTPUT_PATH
     '''
   }
 }
