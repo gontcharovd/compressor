@@ -23,14 +23,6 @@ param enabledForTemplateDeployment bool = true
 @description('Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. Get it by using Get-AzSubscription cmdlet.')
 param tenantId string = subscription().tenantId
 
-@description('Specifies the object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies. Get it by using Get-AzADUser or Get-AzADServicePrincipal cmdlets.')
-param objectId string = 'fb18a347-876b-4072-a936-3dab8fcadd8b'
-
-@description('Specifies the permissions to secrets in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge.')
-param secretsPermissions array = [
-  'list', 'get'
-]
-
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyVaultName
   location: location
@@ -40,15 +32,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
     enabledForTemplateDeployment: enabledForTemplateDeployment
     enableRbacAuthorization: true
     tenantId: tenantId
-    accessPolicies: [
-      {
-        objectId: objectId
-        tenantId: tenantId
-        permissions: {
-          secrets: secretsPermissions
-        }
-      }
-    ]
     sku: {
       name: 'standard'
       family: 'A'
