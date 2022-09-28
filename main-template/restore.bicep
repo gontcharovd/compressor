@@ -37,6 +37,14 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
       export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
       echo "PGPASSWORD: ${PGPASSWORD}"
       jq -n --arg var $PGPASSWORD '{ "result": $var }' | tee $AZ_SCRIPTS_OUTPUT_PATH
+
+      echo "Downloading database dump"
+      az storage blob download \
+        --blob-url https://compressormi.blob.core.windows.net/postgres-database-dump/compressor-data.dump \
+        --auth-mode login \
+        --file ./compressor-data.dump
+      echo $PWD
+      ls -lh
     '''
   }
 }
