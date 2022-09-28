@@ -1,9 +1,9 @@
 param location string = resourceGroup().location
 param subscriptionId string = subscription().subscriptionId
 param resourceGroupName string = 'compressorManagedIdentity'
-param storageAccountName string = 'compressormi'
+// param storageAccountName string = 'compressormi'
 param currentTime string = utcNow()
-// param keyVaultName string
+param keyVaultName string
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
   name: 'compressor-managed-identity'
@@ -23,16 +23,22 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
   properties: {
     azCliVersion: '2.37.0'
     retentionInterval: 'P1D'
-    arguments: '-storageAccountName ${storageAccountName}'
+    environmentVariables: [
+      {
+        name: 'keyVaultName'
+        value: keyVaultName
+      }
+    ]
     cleanupPreference: 'OnSuccess'
     forceUpdateTag: currentTime
     scriptContent: '''
       az login --identity
-      #export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
-      blob_name=$(az storage blob list --container-name postgres-database-dump --account-name $storageAccountName --query [0].name)
-      blob_name="alfred"
-      echo "blob name: ${blob_name}"
-      jq -n --arg blob $blob_name '{ "result": $blob }' | tee $AZ_SCRIPTS_OUTPUT_PATH
+      echo "keyVaultName: ${keyVaultName}"
+      export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
+      echo "PGPASSWORD: ${PGPASSWORD}"
+      jq -n --arg var $PGPASSWORD '{ "result": $var }' | tee $AZ_SCRIPTS_OUTPUT_PATH
     '''
   }
 }
+
+// output result object = restoreDatabaseDump.properties.outputs
