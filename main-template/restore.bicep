@@ -55,8 +55,7 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
       az login --identity
 
       echo "Getting Postgres password from Key Vault"
-      export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
-      #jq -n --arg var $PGPASSWORD '{ "result": $var }' | tee $AZ_SCRIPTS_OUTPUT_PATH
+      export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value | xargs)
 
       echo "Downloading Postgres database dump"
       url=https://${storageAccountName}.blob.${storageURL}/${containerName}/${dataDumpName}
@@ -78,5 +77,3 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
     '''
   }
 }
-
-// output result object = restoreDatabaseDump.properties.outputs
