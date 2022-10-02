@@ -5,4 +5,6 @@ pg_restore \
     --dbname=postgres \
     --username=gontcharovd \
     --verbose \
+    --clean \
+    --if-exists \
     /home/denis/code/compressor/sql/compressor-data.dump
