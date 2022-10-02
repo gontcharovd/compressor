@@ -5,10 +5,31 @@ param managedIdentityName string = 'managedIdentity${uniqueString(resourceGroup(
 @description('Postgres database name must be lowercase.')
 param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
-param keyVaultName string
+param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
 
-resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
-  name: keyVaultName
+// secrets
+@secure()
+param cogniteApiKeyValue string
+@secure()
+param cogniteProjectValue string
+@secure()
+param cogniteClientValue string
+@secure()
+param postgresUserValue string
+@secure()
+param postgresPasswordValue string
+
+module keyVault '../linked-templates/key-vault/azuredeploy.bicep' = {
+  name: 'keyVault'
+  params: {
+    location: location
+    keyVaultName: keyVaultName
+    cogniteApiKeyValue: cogniteApiKeyValue
+    cogniteClientValue: cogniteClientValue
+    cogniteProjectValue: cogniteProjectValue
+    postgresUserValue: postgresUserValue
+    postgresPasswordValue: postgresPasswordValue
+  }
 }
 
 module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
@@ -49,8 +70,8 @@ module postgresDatabase '../linked-templates/postgres-database/azuredeploy.bicep
   name: 'postgresDatabase'
   params: {
     location: location
-    administratorLogin: keyVault.getSecret('postgresUser')
-    administratorLoginPassword: keyVault.getSecret('postgresPassword')
+    administratorLogin: postgresUserValue
+    administratorLoginPassword: postgresPasswordValue
     postgresDatabaseName: postgresDatabaseName
     managedIdentityId: managedIdentity.outputs.managedIdentityResourceId
   }
