@@ -2,7 +2,7 @@ param location string = resourceGroup().location
 param subscriptionId string = subscription().subscriptionId
 param resourceGroupName string = 'compressorManagedIdentity'
 param storageAccountName string = 'compressormi'
-param containerName string = 'posgres-database-dump'
+param containerName string = 'postgres-database-dump'
 param dataDumpName string = 'compressor-data.dump'
 param currentTime string = utcNow()
 param keyVaultName string
@@ -53,30 +53,28 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
     forceUpdateTag: currentTime
     scriptContent: '''
       az login --identity
-      echo "keyVaultName: ${keyVaultName}"
+
+      echo "Getting Postgres password from Key Vault"
       export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value)
-      echo "PGPASSWORD: ${PGPASSWORD}"
       #jq -n --arg var $PGPASSWORD '{ "result": $var }' | tee $AZ_SCRIPTS_OUTPUT_PATH
 
-      echo "Downloading database dump"
+      echo "Downloading Postgres database dump"
+      url=https://${storageAccountName}.blob.${storageURL}/${containerName}/${dataDumpName}
       az storage blob download \
-        --blob-url https://${storageAccountName}.blob.${storageURL}/${containerName}/{dataDumpName} \
+        --blob-url $url \
         --auth-mode login \
         --file ./${dataDumpName}
 
-      ls -lh
+      echo "Installing postgresql-client"
+      apk add --no-cache postgresql-client 
 
-      cat /etc/os-release
-      #echo "Install postgresql-client
-      #apk add --no-cache postgresql-client 
-
-      echo "Seed database"
-      #pg_restore \
-      #    --host=postgresdatabase7cwkv6diblxjy.postgres.database.azure.com \
-      #    --dbname=postgres \
-      #    --username=gontcharovd \
-      #    --verbose \
-      #    ./${dataDumpName}
+      echo "Seeding database"
+      pg_restore \
+        --host=postgresdatabase7cwkv6diblxjy.postgres.database.azure.com \
+        --dbname=postgres \
+        --username=gontcharovd \
+        --verbose \
+        ./${dataDumpName}
     '''
   }
 }
