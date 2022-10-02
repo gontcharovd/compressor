@@ -1,18 +1,11 @@
 param location string
 param postgresDatabaseName string
-param keyVaultName string
 param virtualNetworkExternalId string = ''
 param subnetName string = ''
 param privateDnsZoneArmResourceId string = ''
 param subscriptionId string = subscription().subscriptionId
 param resourceGroupName string = 'compressorManagedIdentity'
-param storageAccountName string = 'compressormi'
-param containerName string = 'postgres-database-dump'
-param dataDumpName string = 'compressor-data.dump'
-param postgresSecretName string = 'postgresPassword'
 param currentTime string = utcNow()
-
-var storageURL = environment().suffixes.storage
 
 @secure()
 param administratorLogin string
@@ -77,32 +70,12 @@ resource seedPostgresDatabase 'Microsoft.Resources/deploymentScripts@2020-10-01'
     retentionInterval: 'P1D'
     environmentVariables: [
       {
-        name: 'keyVaultName'
-        value: keyVaultName
-      }
-      {
-        name: 'storageAccountName'
-        value: storageAccountName
-      }
-      {
-        name: 'containerName'
-        value: containerName
-      }
-      {
-        name: 'dataDumpName'
-        value: dataDumpName
-      }
-      {
-        name: 'storageURL'
-        value: storageURL
-      }
-      {
-        name: 'postgresUser'
+        name: 'administratorLogin'
         value: postgresDatabase.properties.administratorLogin
       }
       {
-        name: 'postgresSecretName'
-        value: postgresSecretName
+        name: 'PGPASSWORD'
+        value: administratorLoginPassword
       }
       {
         name: 'postgresDatabaseName'
@@ -114,27 +87,20 @@ resource seedPostgresDatabase 'Microsoft.Resources/deploymentScripts@2020-10-01'
     scriptContent: '''
       az login --identity
 
-      export PGPASSWORD=$(az keyvault secret show \
-        --name $postgresSecretName  \
-        --vault-name $keyVaultName \
-        --query value | xargs)
-
-      url=https://${storageAccountName}.blob.${storageURL}/${containerName}/${dataDumpName}
-      az storage blob download \
-        --blob-url $url \
-        --auth-mode login \
-        --file ./${dataDumpName}
-
       apk add --no-cache postgresql-client 
 
-      pg_restore \
+      psql \
         --host=${postgresDatabaseName}.postgres.database.azure.com \
-        --dbname=postgres \
-        --username=$postgresUser \
-        --clean \
-        --if-exists \
-        --verbose \
-        ./${dataDumpName}
+        --username=$administratorLogin \
+        --dbname=postgres <<-EOSQL
+          CREATE TABLE IF NOT EXISTS public.pressure (
+            timestamp TIMESTAMPTZ NOT NULL,
+            asset_id BIGINT NOT NULL,
+            sensor_name VARCHAR (25) NOT NULL,
+            pressure REAL,
+            PRIMARY KEY (timestamp, asset_id)
+        );
+      EOSQL
     '''
   }
 }

@@ -43,6 +43,5 @@ module postgresDatabase '../linked-templates/postgres-database/azuredeploy.bicep
     administratorLogin: keyVault.getSecret('postgresUser')
     administratorLoginPassword: keyVault.getSecret('postgresPassword')
     postgresDatabaseName: postgresDatabaseName
-    keyVaultName: keyVaultName
   }
 }
