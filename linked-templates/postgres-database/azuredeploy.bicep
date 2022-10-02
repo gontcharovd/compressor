@@ -1,10 +1,9 @@
 param location string
+param managedIdentityId string
 param postgresDatabaseName string
 param virtualNetworkExternalId string = ''
 param subnetName string = ''
 param privateDnsZoneArmResourceId string = ''
-param subscriptionId string = subscription().subscriptionId
-param resourceGroupName string = 'compressorManagedIdentity'
 param currentTime string = utcNow()
 
 @secure()
@@ -50,19 +49,14 @@ resource allowAzureResourcesRule 'Microsoft.DBforPostgreSQL/flexibleServers/fire
   }
 }
 
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
-  name: 'compressor-managed-identity'
-  scope: resourceGroup(subscriptionId, resourceGroupName)
-}
-
-resource seedPostgresDatabase 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
-  name: 'restoreDatabaseDump'
+resource createPostgresTable 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
+  name: 'createPostgresTable'
   location: location
   kind: 'AzureCLI'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${managedIdentity.id}': {}
+      '${managedIdentityId}': {}
     }
   }
   properties: {
