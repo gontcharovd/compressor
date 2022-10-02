@@ -1,11 +1,14 @@
+param keyVaultName string
+param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
 param subscriptionId string = subscription().subscriptionId
 param resourceGroupName string = 'compressorManagedIdentity'
 param storageAccountName string = 'compressormi'
 param containerName string = 'postgres-database-dump'
 param dataDumpName string = 'compressor-data.dump'
+param postgresPassword string = 'postgresPassword'
+param postgresUser string = 'gontcharovd'
 param currentTime string = utcNow()
-param keyVaultName string
 
 var storageURL = environment().suffixes.storage
 
@@ -48,30 +51,42 @@ resource restoreDatabaseDump 'Microsoft.Resources/deploymentScripts@2020-10-01' 
         name: 'storageURL'
         value: storageURL
       }
+      {
+        name: 'postgresUser'
+        value: postgresUser
+      }
+      {
+        name: 'postgresPassword'
+        value: postgresPassword
+      }
+      {
+        name: 'postgresDatabaseName'
+        value: postgresDatabaseName
+      }
     ]
     cleanupPreference: 'OnSuccess'
     forceUpdateTag: currentTime
     scriptContent: '''
       az login --identity
 
-      echo "Getting Postgres password from Key Vault"
-      export PGPASSWORD=$(az keyvault secret show --name postgresPassword --vault-name $keyVaultName --query value | xargs)
+      export PGPASSWORD=$(az keyvault secret show \
+        --name $postgresPassword  \
+        --vault-name $keyVaultName \
+        --query value | xargs)
 
-      echo "Downloading Postgres database dump"
       url=https://${storageAccountName}.blob.${storageURL}/${containerName}/${dataDumpName}
       az storage blob download \
         --blob-url $url \
         --auth-mode login \
         --file ./${dataDumpName}
 
-      echo "Installing postgresql-client"
       apk add --no-cache postgresql-client 
 
-      echo "Seeding database"
       pg_restore \
-        --host=postgresdatabase7cwkv6diblxjy.postgres.database.azure.com \
+        --host=${postgresDatabaseName}.postgres.database.azure.com \
         --dbname=postgres \
-        --username=gontcharovd \
+        --username=$postgresUser \
+        --clean \
         --verbose \
         ./${dataDumpName}
     '''
