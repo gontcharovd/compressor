@@ -1,18 +1,13 @@
-@description('The name of the managed identity resource.')
+param location string
 param managedIdentityName string
 
-@description('The IDs of the role definitions to assign to the managed identity. Each role assignment is created at the resource group scope. Role definition IDs are GUIDs. To find the GUID for built-in Azure role definitions, see https://docs.microsoft.com/azure/role-based-access-control/built-in-roles. You can also use IDs of custom role definitions.')
 param roleDefinitionIds array = [
   'acdd72a7-3385-48ef-bd42-f606fba81ae7'  // Reader
-  '4633458b-17de-408a-b874-0445c86b69e6'  // Key Vault Secrets User
   '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec'  // SQL DB Contributor
 ]
 
-@description('An optional description to apply to each role assignment, such as the reason this managed identity needs to be granted the role.')
 param roleAssignmentDescription string = ''
 
-@description('The Azure location where the managed identity should be created.')
-param location string = resourceGroup().location
 
 var roleAssignmentsToCreate = [for roleDefinitionId in roleDefinitionIds: {
   name: guid(managedIdentity.id, resourceGroup().id, roleDefinitionId)
