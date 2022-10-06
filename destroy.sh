@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 location=westeurope
 resourceGroupName=compressor
-keyVaultName=keyVaultCompressor1994
+keyVaultName=keyVault7cwkv6diblxjy
 
 az account set --name compressor
 echo "Deleting resource group"
