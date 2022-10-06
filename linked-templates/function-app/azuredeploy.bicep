@@ -87,6 +87,16 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
+resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
+  parent: functionApp
+  name: 'web'
+  properties: {
+    repoUrl: 'https://github.com/gontcharovd/get-sensor-data'
+    branch: 'main'
+    isManualIntegration: false
+  }
+}
+
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: applicationInsightsName
   location: appInsightsLocation
