@@ -109,7 +109,7 @@ resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
       isLinux: true
     }
     isGitHubAction: true
-    isManualIntegration: false
+    isManualIntegration: true
     isMercurial: false
     repoUrl: 'https://github.com/gontcharovd/test-function-deploy.git'
   }
