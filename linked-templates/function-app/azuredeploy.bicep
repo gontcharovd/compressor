@@ -88,12 +88,30 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
 }
 
 resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
-  parent: functionApp
   name: 'web'
+  // kind: 'string'
+  parent: functionApp
   properties: {
-    repoUrl: 'https://github.com/gontcharovd/get-sensor-data'
     branch: 'main'
+    deploymentRollbackEnabled: false
+    gitHubActionConfiguration: {
+    //   codeConfiguration: {
+    //     runtimeStack: 'string'
+    //     runtimeVersion: 'string'
+    //   }
+    //   containerConfiguration: {
+    //     imageName: 'string'
+    //     password: 'string'
+    //     serverUrl: 'string'
+    //     username: 'string'
+    //   }
+      generateWorkflowFile: false
+      isLinux: true
+    }
+    isGitHubAction: true
     isManualIntegration: false
+    isMercurial: false
+    repoUrl: 'https://github.com/gontcharovd/test-function-deploy.git'
   }
 }
 
