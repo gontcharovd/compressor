@@ -66,33 +66,27 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
-// resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
-//   name: 'web'
-//   // kind: 'string'
-//   parent: functionApp
-//   properties: {
-//     branch: 'main'
-//     deploymentRollbackEnabled: false
-//     gitHubActionConfiguration: {
-//     //   codeConfiguration: {
-//     //     runtimeStack: 'string'
-//     //     runtimeVersion: 'string'
-//     //   }
-//     //   containerConfiguration: {
-//     //     imageName: 'string'
-//     //     password: 'string'
-//     //     serverUrl: 'string'
-//     //     username: 'string'
-//     //   }
-//       generateWorkflowFile: false
-//       isLinux: true
-//     }
-//     isGitHubAction: true
-//     isManualIntegration: true
-//     isMercurial: false
-//     repoUrl: 'https://github.com/gontcharovd/test-function-deploy.git'
-//   }
-// }
+resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
+  name: 'web'
+  kind: 'GitHubAction'
+  parent: functionApp
+  properties: {
+    branch: 'main'
+    deploymentRollbackEnabled: false
+    gitHubActionConfiguration: {
+      codeConfiguration: {
+        runtimeStack: 'python'
+        runtimeVersion: '3.8'
+      }
+      generateWorkflowFile: true
+      isLinux: true
+    }
+    isGitHubAction: true
+    isManualIntegration: false
+    isMercurial: false
+    repoUrl: 'https://github.com/gontcharovd/test-function-deploy.git'
+  }
+}
 
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: applicationInsightsName
