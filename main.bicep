@@ -19,7 +19,7 @@ param postgresUserValue string
 @secure()
 param postgresPasswordValue string
 
-module keyVault '../linked-templates/key-vault/azuredeploy.bicep' = {
+module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
   name: 'keyVault'
   params: {
     location: location
@@ -32,7 +32,7 @@ module keyVault '../linked-templates/key-vault/azuredeploy.bicep' = {
   }
 }
 
-module containerRegistry '../linked-templates/container-registry/azuredeploy.bicep' = {
+module containerRegistry './linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
   params: {
     containerRegistryName: containerRegistryName
@@ -40,7 +40,7 @@ module containerRegistry '../linked-templates/container-registry/azuredeploy.bic
   }
 }
 
-module functionApp '../linked-templates/function-app/azuredeploy.bicep' = {
+module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
   name: 'functionApp'
   params: {
     location: location
@@ -49,7 +49,7 @@ module functionApp '../linked-templates/function-app/azuredeploy.bicep' = {
   }
 }
 
-module webApp '../linked-templates/web-app/azuredeploy.bicep' = {
+module webApp './linked-templates/web-app/azuredeploy.bicep' = {
   name: 'webApp'
   params: {
     webAppName: webAppName
@@ -58,7 +58,7 @@ module webApp '../linked-templates/web-app/azuredeploy.bicep' = {
   }
 }
 
-module managedIdentity '../linked-templates/managed-identity/azuredeploy.bicep' = {
+module managedIdentity './linked-templates/managed-identity/azuredeploy.bicep' = {
   name: 'managedIdentity'
   params: {
     managedIdentityName: managedIdentityName
@@ -66,7 +66,7 @@ module managedIdentity '../linked-templates/managed-identity/azuredeploy.bicep' 
   }
 }
 
-module postgresDatabase '../linked-templates/postgres-database/azuredeploy.bicep' = {
+module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
   name: 'postgresDatabase'
   params: {
     location: location
