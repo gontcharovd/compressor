@@ -13,7 +13,7 @@ az group create --location $location --resource-group $resourceGroupName
 echo "Deploying resources"
 az deployment group create \
     --resource-group $resourceGroupName \
-    --template-file main-template/main.bicep \
+    --template-file main.bicep \
     --parameters \
         cogniteApiKeyValue=${COGNITE_API_KEY} \
         cogniteClientValue=${COGNITE_CLIENT} \
