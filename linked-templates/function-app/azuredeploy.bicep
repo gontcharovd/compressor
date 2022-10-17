@@ -97,3 +97,12 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
     Request_Source: 'rest'
   }
 }
+
+module functionAppRA '../role-assignment/azuredeploy.bicep' = {
+  name: 'runctionAppRA'
+  params: {
+    managedIdentityId: functionApp.identity.tenantId 
+    managedIdentityPrincipalId: functionApp.identity.principalId
+    roleDefinitionIds: ['4633458b-17de-408a-b874-0445c86b69e6']  // key vault secrets user
+  }
+}

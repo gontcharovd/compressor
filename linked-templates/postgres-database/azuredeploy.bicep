@@ -1,6 +1,6 @@
 param location string
 param postgresDatabaseName string
-param managedIdentityName string
+param managedIdentityName string = 'postgresDeploymentScriptMI${uniqueString(resourceGroup().id)}'
 param virtualNetworkExternalId string = ''
 param subnetName string = ''
 param privateDnsZoneArmResourceId string = ''

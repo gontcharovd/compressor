@@ -1,7 +1,6 @@
 param containerRegistryName string = 'containterRegistry${uniqueString(resourceGroup().id)}'
 param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
 param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
-param managedIdentityName string = 'managedIdentity${uniqueString(resourceGroup().id)}'
 @description('Postgres database name must be lowercase.')
 param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
@@ -65,6 +64,5 @@ module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep'
     administratorLogin: postgresUserValue
     administratorLoginPassword: postgresPasswordValue
     postgresDatabaseName: postgresDatabaseName
-    managedIdentityName: managedIdentityName
   }
 }
