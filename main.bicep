@@ -58,14 +58,6 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
   }
 }
 
-module managedIdentity './linked-templates/managed-identity/azuredeploy.bicep' = {
-  name: 'managedIdentity'
-  params: {
-    managedIdentityName: managedIdentityName
-    location: location
-  }
-}
-
 module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
   name: 'postgresDatabase'
   params: {
@@ -73,6 +65,6 @@ module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep'
     administratorLogin: postgresUserValue
     administratorLoginPassword: postgresPasswordValue
     postgresDatabaseName: postgresDatabaseName
-    managedIdentityId: managedIdentity.outputs.managedIdentityResourceId
+    managedIdentityName: managedIdentityName
   }
 }

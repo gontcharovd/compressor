@@ -1,6 +1,6 @@
 param location string
-param managedIdentityId string
 param postgresDatabaseName string
+param managedIdentityName string
 param virtualNetworkExternalId string = ''
 param subnetName string = ''
 param privateDnsZoneArmResourceId string = ''
@@ -40,6 +40,23 @@ resource postgresDatabase 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01'
   }
 }
 
+resource postgresDeploymentScriptMI 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: managedIdentityName
+  location: location
+}
+
+module postgresDeploymentScriptRA '../role-assignment/azuredeploy.bicep' = {
+  name: 'postgresDeploymentScriptRA'
+  params:{
+    managedIdentityId: postgresDeploymentScriptMI.id
+    managedIdentityPrincipalId: postgresDeploymentScriptMI.properties.principalId
+    roleDefinitionIds: [
+      'acdd72a7-3385-48ef-bd42-f606fba81ae7'  // Reader
+      '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec'  // SQL DB Contributor
+    ]
+  }
+}
+
 resource allowAzureResourcesRule 'Microsoft.DBforPostgreSQL/flexibleServers/firewallRules@2022-01-20-preview' = {
   name: 'AllowAllAzureServicesAndResources'
   parent: postgresDatabase
@@ -56,7 +73,7 @@ resource createPostgresTable 'Microsoft.Resources/deploymentScripts@2020-10-01' 
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${managedIdentityId}': {}
+      '${postgresDeploymentScriptMI.id}': {}
     }
   }
   properties: {
