@@ -94,7 +94,7 @@ resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
     isGitHubAction: true
     isManualIntegration: false
     isMercurial: false
-    repoUrl: 'https://github.com/gontcharovd/test-function-deploy.git'
+    repoUrl: 'https://github.com/gontcharovd/get-sensor-data.git'
   }
 }
 
