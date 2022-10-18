@@ -45,6 +45,8 @@ module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
     location: location
     appInsightsLocation: location
     appName: functionAppName
+    postgresHost: postgresDatabase.outputs.postgresHost
+    keyVaultName: keyVault.outputs.keyVaultName
   }
 }
 

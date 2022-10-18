@@ -2,6 +2,8 @@ param appName string
 param location string
 param storageAccountType string = 'Standard_LRS'
 param appInsightsLocation string
+param postgresHost string
+param keyVaultName string
 
 var functionAppName = appName
 var hostingPlanName = appName
@@ -57,6 +59,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'python'
+        }
+        {
+          name: 'HOST_NAME'
+          value: postgresHost
+        }
+        {
+          name: 'VAULT_NAME'
+          value: keyVaultName
         }
       ]
       ftpsState: 'FtpsOnly'

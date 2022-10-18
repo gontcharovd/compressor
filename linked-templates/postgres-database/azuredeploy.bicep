@@ -115,3 +115,5 @@ resource createPostgresTable 'Microsoft.Resources/deploymentScripts@2020-10-01' 
     '''
   }
 }
+
+output postgresHost string = postgresDatabase.name
