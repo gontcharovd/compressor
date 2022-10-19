@@ -40,7 +40,7 @@ resource cogniteApiKey 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = 
 
 resource cogniteProject 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   parent: keyVault
-  name: 'cogiteProject'
+  name: 'cogniteProject'
   properties: {
     value: cogniteProjectValue
   }
