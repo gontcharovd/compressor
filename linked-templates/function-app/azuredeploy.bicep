@@ -113,6 +113,9 @@ module functionAppRA '../role-assignment/azuredeploy.bicep' = {
   params: {
     managedIdentityId: functionApp.identity.tenantId 
     managedIdentityPrincipalId: functionApp.identity.principalId
-    roleDefinitionIds: ['4633458b-17de-408a-b874-0445c86b69e6']  // key vault secrets user
+    roleDefinitionIds: [
+      '4633458b-17de-408a-b874-0445c86b69e6'  // key vault secrets user
+      '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec'  // SQL DB Contributor
+    ]  
   }
 }
