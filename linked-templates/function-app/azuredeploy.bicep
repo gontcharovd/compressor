@@ -88,7 +88,7 @@ resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
         runtimeStack: 'python'
         runtimeVersion: '3.8'
       }
-      generateWorkflowFile: true
+      generateWorkflowFile: false
       isLinux: true
     }
     isGitHubAction: true
