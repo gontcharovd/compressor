@@ -78,7 +78,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
 
 resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
   name: 'web'
-  kind: 'GitHubAction'
   parent: functionApp
   properties: {
     branch: 'main'
@@ -88,13 +87,12 @@ resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
         runtimeStack: 'python'
         runtimeVersion: '3.8'
       }
-      generateWorkflowFile: false
+      generateWorkflowFile: true
       isLinux: true
     }
     isGitHubAction: true
     isManualIntegration: false
-    isMercurial: false
-    repoUrl: 'https://github.com/gontcharovd/get-sensor-data.git'
+    repoUrl: 'https://github.com/gontcharovd/get-sensor-data'
   }
 }
 
