@@ -2,8 +2,10 @@
 location=westeurope
 resourceGroupName=compressor
 
+dir=/home/denis/code/compressor
+
 echo "Loading secrets from .env file"
-export $(grep -v '^#' secrets.env | xargs -0)
+export $(grep -v '^#' ${dir}/secrets.env | xargs -0)
 
 az account set --name compressor
 
@@ -13,7 +15,7 @@ az group create --location $location --resource-group $resourceGroupName
 echo "Deploying resources"
 az deployment group create \
     --resource-group $resourceGroupName \
-    --template-file main.bicep \
+    --template-file ${dir}/main.bicep \
     --parameters \
         cogniteApiKeyValue=${COGNITE_API_KEY} \
         cogniteClientValue=${COGNITE_CLIENT} \
