@@ -1,4 +1,5 @@
 param containerRegistryName string = 'containterregistry${uniqueString(resourceGroup().id)}'
+param appServicePlanName string = 'appServicePlan${uniqueString(resourceGroup().id)}'
 param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
 param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
 @description('Postgres database name must be lowercase.')
@@ -39,12 +40,21 @@ module containerRegistry './linked-templates/container-registry/azuredeploy.bice
   }
 }
 
+module appServicePlan './linked-templates/app-service-plan/azuredeploy.bicep' = {
+  name: 'appServicePlan'
+  params: {
+    appServicePlanName: appServicePlanName
+    location: location
+  }
+}
+
 module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
   name: 'functionApp'
   params: {
     location: location
     appInsightsLocation: location
     appName: functionAppName
+    serverFarmId: appServicePlan.outputs.serverFarmId
     postgresHost: postgresDatabase.outputs.postgresHost
     keyVaultName: keyVault.outputs.keyVaultName
   }
@@ -55,6 +65,7 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
   name: 'webApp'
   params: {
     webAppName: webAppName
+    serverFarmId: appServicePlan.outputs.serverFarmId
     location: location
     containerRegistry: containerRegistryName
   }
