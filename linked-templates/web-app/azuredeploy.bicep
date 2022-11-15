@@ -1,6 +1,6 @@
 param webAppName string
 param serverFarmId string
-param containerImage string = 'compressor'
+param containerImage string = 'minimalshiny'
 param containerImageTag string = 'latest'
 param containerRegistry string
 param linuxFxVersion string = 'DOCKER|${containerRegistry}.azurecr.io/${containerImage}:${containerImageTag}'
@@ -16,7 +16,7 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    enabled: false
+    enabled: true
     serverFarmId: serverFarmId
     siteConfig: {
       linuxFxVersion: linuxFxVersion
