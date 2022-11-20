@@ -125,7 +125,7 @@ resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
       isLinux: true
     }
     isGitHubAction: true
-    isManualIntegration: true
+    isManualIntegration: false
     repoUrl: 'https://github.com/gontcharovd/compressor-shiny-app'
   }
 }
