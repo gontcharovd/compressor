@@ -95,7 +95,7 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 module functionAppRA '../role-assignment/azuredeploy.bicep' = {
-  name: 'runctionAppRA'
+  name: 'functionAppRA'
   params: {
     managedIdentityId: functionApp.identity.tenantId 
     managedIdentityPrincipalId: functionApp.identity.principalId
