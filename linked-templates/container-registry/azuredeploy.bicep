@@ -35,3 +35,5 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
     anonymousPullEnabled: false
   }
 }
+
+output registryName string = containerRegistry.name

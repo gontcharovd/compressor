@@ -67,7 +67,7 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
     webAppName: webAppName
     serverFarmId: appServicePlan.outputs.serverFarmId
     location: location
-    containerRegistry: containerRegistryName
+    containerRegistry: containerRegistry.outputs.registryName
   }
 }
 
