@@ -76,7 +76,6 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       ]
       scmIpSecurityRestrictionsUseMain: false
       scmMinTlsVersion: '1.2'
-      scmType: 'GitHubAction'
       use32BitWorkerProcess: true
       virtualApplications: [
         {
