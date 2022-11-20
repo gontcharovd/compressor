@@ -61,7 +61,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       netFrameworkVersion: 'v4.0'
       numberOfWorkers: 1
       preWarmedInstanceCount: 0
-      publishingUsername: '$webbapp7cwkv6diblxjy'
+      publishingUsername: webAppName  // used to be '$webbapp7cwkv6diblxjy'
       remoteDebuggingEnabled: false
       remoteDebuggingVersion: 'VS2019'
       requestTracingEnabled: false
