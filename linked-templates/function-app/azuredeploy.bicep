@@ -4,9 +4,9 @@ param storageAccountType string = 'Standard_LRS'
 param appInsightsLocation string
 param postgresHost string
 param keyVaultName string
-param serverFarmId string
 
 var functionAppName = appName
+var hostingPlanName = appName
 var applicationInsightsName = appName
 var storageAccountName = 'fappstorage${uniqueString(resourceGroup().id)}'
 
@@ -19,6 +19,18 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   kind: 'Storage'
 }
 
+resource hostingPlan 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: hostingPlanName
+  location: location
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+  }
+  properties: {
+    reserved: true  // true for Linux
+  }
+}
+
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: location
@@ -28,7 +40,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
   properties: {
     reserved: true  // true for Linux
-    serverFarmId: serverFarmId
+    serverFarmId: hostingPlan.id
     siteConfig: {
       linuxFxVersion: 'python|3.8'
       appSettings: [

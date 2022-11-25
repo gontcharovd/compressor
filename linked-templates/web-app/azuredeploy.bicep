@@ -1,5 +1,5 @@
 param webAppName string
-param serverFarmId string
+param sku string = 'F1'
 param containerImage string = 'compressor'
 param containerImageTag string = 'latest'
 param containerRegistry string
@@ -8,6 +8,18 @@ param location string
 
 var registryServerUrl = '${containerRegistry}.azurecr.io'
 var webSiteName = toLower(webAppName)
+
+resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+  name: 'appServicePlan'
+  location: location
+  properties: {
+    reserved: true
+  }
+  sku: {
+    name: sku
+  }
+  kind: 'linux'
+}
 
 resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   name: webSiteName
@@ -19,7 +31,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   properties: {
     enabled: true
     reserved: true
-    serverFarmId: serverFarmId
+    serverFarmId: appServicePlan.id
     siteConfig: {
       linuxFxVersion: linuxFxVersion
       acrUseManagedIdentityCreds: true
