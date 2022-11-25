@@ -10,7 +10,7 @@ var registryServerUrl = '${containerRegistry}.azurecr.io'
 var webSiteName = toLower(webAppName)
 
 resource webAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
-  name: 'appServicePlan'
+  name: webAppName
   location: location
   properties: {
     reserved: true
