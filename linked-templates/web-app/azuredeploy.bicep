@@ -39,45 +39,43 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   }
 }
 
-resource ftpPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-03-01' = {
-  name: 'ftp'
-  kind: 'string'
-  parent: webApp
-  properties: {
-    allow: true
-  }
-}
+// resource ftpPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-03-01' = {
+//   name: 'ftp'
+//   kind: 'string'
+//   parent: webApp
+//   properties: {
+//     allow: true
+//   }
+// }
 
-resource scmPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-03-01' = {
-  name: 'scm'
-  kind: 'string'
-  parent: webApp
-  properties: {
-    allow: true
-  }
-}
+// resource scmPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-03-01' = {
+//   name: 'scm'
+//   kind: 'string'
+//   parent: webApp
+//   properties: {
+//     allow: true
+//   }
+// }
 
-resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
-  name: 'web'
-  parent: webApp
-  properties: {
-    branch: 'main'
-    deploymentRollbackEnabled: false
-    gitHubActionConfiguration: {
-      containerConfiguration: {
-        imageName: containerImage
-        serverUrl: registryServerUrl
-        username: containerRegistry
-        password: 'hdskChCtufK/3wUNV1sP0QBPI3iDuk2U'
-      }
-      generateWorkflowFile: true
-      isLinux: true
-    }
-    isGitHubAction: true
-    isManualIntegration: false
-    repoUrl: 'https://github.com/gontcharovd/minimal-shiny-app'
-  }
-}
+// resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
+//   name: 'web'
+//   parent: webApp
+//   properties: {
+//     branch: 'main'
+//     deploymentRollbackEnabled: false
+//     gitHubActionConfiguration: {
+//       containerConfiguration: {
+//         imageName: containerImage
+//         serverUrl: registryServerUrl
+//       }
+//       generateWorkflowFile: true
+//       isLinux: true
+//     }
+//     isGitHubAction: true
+//     isManualIntegration: false
+//     repoUrl: 'https://github.com/gontcharovd/minimal-shiny-app'
+//   }
+// }
 
 module webAppRA '../role-assignment/azuredeploy.bicep' = {
   name: 'webApp'
