@@ -17,8 +17,8 @@ az deployment group create \
     --resource-group $resourceGroupName \
     --template-file ${dir}/main.bicep \
     --parameters \
-        cogniteApiKeyValue=${COGNITE_API_KEY} \
-        cogniteClientValue=${COGNITE_CLIENT} \
-        cogniteProjectValue=${COGNITE_PROJECT} \
+        cogniteClientIDValue=${CLIENT_ID} \
+        cogniteClientSecretValue=${CLIENT_SECRET} \
+        cogniteTenantIDValue=${TENANT_ID} \
         postgresUserValue=${POSTGRES_USER} \
         postgresPasswordValue=${POSTGRES_PASSWORD} \

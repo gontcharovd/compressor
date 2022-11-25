@@ -1,11 +1,11 @@
 param keyVaultName string
 param location string
 @secure()
-param cogniteApiKeyValue string
+param cogniteClientIDValue string
 @secure()
-param cogniteProjectValue string
+param cogniteClientSecretValue string
 @secure()
-param cogniteClientValue string
+param cogniteTenantIDValue string
 @secure()
 param postgresUserValue string
 @secure()
@@ -30,27 +30,27 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   }
 }
 
-resource cogniteApiKey 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource cogniteClientID 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   parent: keyVault
-  name: 'cogniteApiKey'
+  name: 'cogniteClientID'
   properties: {
-    value: cogniteApiKeyValue
+    value: cogniteClientIDValue
   }
 }
 
-resource cogniteProject 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource cogniteClientSecret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   parent: keyVault
-  name: 'cogniteProject'
+  name: 'cogniteClientSecret'
   properties: {
-    value: cogniteProjectValue
+    value: cogniteClientSecretValue
   }
 }
 
-resource cogniteClient 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource cogniteTenantID 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   parent: keyVault
-  name: 'cogniteClient'
+  name: 'cogniteTenantID'
   properties: {
-    value: cogniteClientValue
+    value: cogniteTenantIDValue
   }
 }
 

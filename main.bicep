@@ -1,6 +1,6 @@
 param containerRegistryName string = 'containterregistry${uniqueString(resourceGroup().id)}'
 param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
-param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
+// param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
 @description('Postgres database name must be lowercase.')
 param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
@@ -8,11 +8,11 @@ param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
 
 // secrets
 @secure()
-param cogniteApiKeyValue string
+param cogniteClientIDValue string
 @secure()
-param cogniteProjectValue string
+param cogniteClientSecretValue string
 @secure()
-param cogniteClientValue string
+param cogniteTenantIDValue string
 @secure()
 param postgresUserValue string
 @secure()
@@ -23,9 +23,9 @@ module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
   params: {
     location: location
     keyVaultName: keyVaultName
-    cogniteApiKeyValue: cogniteApiKeyValue
-    cogniteClientValue: cogniteClientValue
-    cogniteProjectValue: cogniteProjectValue
+    cogniteClientIDValue: cogniteClientIDValue
+    cogniteClientSecretValue: cogniteClientSecretValue
+    cogniteTenantIDValue: cogniteTenantIDValue
     postgresUserValue: postgresUserValue
     postgresPasswordValue: postgresPasswordValue
   }
@@ -50,7 +50,6 @@ module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
   }
 }
 
-// // Must be Linux to coexist with Function App
 // module webApp './linked-templates/web-app/azuredeploy.bicep' = {
 //   name: 'webApp'
 //   params: {
