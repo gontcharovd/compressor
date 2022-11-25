@@ -21,7 +21,7 @@ resource webAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   kind: 'linux'
 }
 
-resource webApp 'Microsoft.Web/sites@2020-06-01' = {
+resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webSiteName
   location: location
   kind: 'app,linux,container'
@@ -35,70 +35,6 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
     siteConfig: {
       linuxFxVersion: linuxFxVersion
       acrUseManagedIdentityCreds: true
-      alwaysOn: false
-      autoHealEnabled: false
-      defaultDocuments: [
-        'Default.htm'
-        'Default.html'
-        'Default.asp'
-        'index.htm'
-        'index.html'
-        'iisstart.htm'
-        'default.aspx'
-        'index.php'
-        'hostingstart.html'
-      ]
-      detailedErrorLoggingEnabled: false
-      experiments: {
-        rampUpRules: []
-      }
-      ftpsState: 'AllAllowed'
-      http20Enabled: false
-      httpLoggingEnabled: true
-      ipSecurityRestrictions: [
-        {
-          action: 'Allow'
-          description: 'Allow all access'
-          ipAddress: 'Any'
-          name: 'Allow all'
-          priority: 2147483647
-        }
-      ]
-      loadBalancing: 'LeastRequests'
-      localMySqlEnabled: false
-      logsDirectorySizeLimit: 35
-      managedPipelineMode: 'Integrated'
-      managedServiceIdentityId: 14896  // What is this?
-      minTlsVersion: '1.2'
-      netFrameworkVersion: 'v4.0'
-      numberOfWorkers: 1
-      preWarmedInstanceCount: 0
-      publishingUsername: webAppName  // used to be '$webbapp7cwkv6diblxjy'
-      remoteDebuggingEnabled: false
-      remoteDebuggingVersion: 'VS2019'
-      requestTracingEnabled: false
-      scmIpSecurityRestrictions: [
-        {
-          action: 'Allow'
-          description: 'Allow all access'
-          ipAddress: 'Any'
-          name: 'Allow all'
-          priority: 2147483647
-        }
-      ]
-      scmIpSecurityRestrictionsUseMain: false
-      scmMinTlsVersion: '1.2'
-      use32BitWorkerProcess: true
-      virtualApplications: [
-        {
-          physicalPath: 'site\\wwwroot'
-          preloadEnabled: false
-          virtualPath: '/'
-        }
-      ]
-      vnetPrivatePortsCount: 0
-      vnetRouteAllEnabled: false
-      webSocketsEnabled: false
     }
   }
 }
@@ -131,6 +67,8 @@ resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
       containerConfiguration: {
         imageName: containerImage
         serverUrl: registryServerUrl
+        username: containerRegistry
+        password: 'hdskChCtufK/3wUNV1sP0QBPI3iDuk2U'
       }
       generateWorkflowFile: true
       isLinux: true
