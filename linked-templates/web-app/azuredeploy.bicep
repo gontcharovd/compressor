@@ -9,7 +9,7 @@ param location string
 var registryServerUrl = '${containerRegistry}.azurecr.io'
 var webSiteName = toLower(webAppName)
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+resource webAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: 'appServicePlan'
   location: location
   properties: {
@@ -31,7 +31,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   properties: {
     enabled: true
     reserved: true
-    serverFarmId: appServicePlan.id
+    serverFarmId: webAppServicePlan.id
     siteConfig: {
       linuxFxVersion: linuxFxVersion
       acrUseManagedIdentityCreds: true
