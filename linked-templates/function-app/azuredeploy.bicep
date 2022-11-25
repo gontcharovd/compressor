@@ -19,7 +19,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   kind: 'Storage'
 }
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2022-03-01' = {
+resource functionAppHostingPlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: hostingPlanName
   location: location
   sku: {
@@ -40,7 +40,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
   properties: {
     reserved: true  // true for Linux
-    serverFarmId: hostingPlan.id
+    serverFarmId: functionAppHostingPlan.id
     siteConfig: {
       linuxFxVersion: 'python|3.8'
       appSettings: [
