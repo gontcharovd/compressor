@@ -2,7 +2,7 @@
 location=westeurope
 backendResourceGroupName=compressor-backend
 frontendResourceGroupName=compressor-frontend
-keyVaultName=keyVault7cwkv6diblxjy
+keyVaultName=keyVaultepq74eywt4twa
 
 az account set --name compressor
 echo "Deleting backend resource group"
