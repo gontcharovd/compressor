@@ -1,10 +1,5 @@
-param containerRegistryName string = 'containterregistry${uniqueString(resourceGroup().id)}'
-param functionAppName string = 'functionApp${uniqueString(resourceGroup().id)}'
-param webAppName string = 'webbApp${uniqueString(resourceGroup().id)}'
-@description('Postgres database name must be lowercase.')
-param postgresDatabaseName string = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 param location string = resourceGroup().location
-param keyVaultName string = 'keyVault${uniqueString(resourceGroup().id)}'
+param frontendResourceGroupName string
 
 @secure()
 param cogniteClientIDValue string
@@ -16,6 +11,13 @@ param cogniteTenantIDValue string
 param postgresUserValue string
 @secure()
 param postgresPasswordValue string
+
+var webAppName = 'webbApp${uniqueString(frontendResourceGroupName)}'
+var containerRegistryName = 'containterregistry${uniqueString(frontendResourceGroupName)}'
+var keyVaultName = 'keyVault${uniqueString(resourceGroup().id)}'
+var functionAppName = 'functionApp${uniqueString(resourceGroup().id)}'
+@description('Postgres database name must be lowercase.')
+var postgresDatabaseName = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 
 module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
   name: 'keyVault'
@@ -32,9 +34,20 @@ module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
 
 module containerRegistry './linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
+  scope: resourceGroup(frontendResourceGroupName)
   params: {
     containerRegistryName: containerRegistryName
     location: location
+  }
+}
+
+module webApp './linked-templates/web-app/azuredeploy.bicep' = {
+  name: 'webApp'
+  scope: resourceGroup(frontendResourceGroupName)
+  params: {
+    webAppName: webAppName
+    location: location
+    containerRegistry: containerRegistry.outputs.registryName
   }
 }
 
@@ -46,15 +59,6 @@ module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
     appName: functionAppName
     postgresHost: postgresDatabase.outputs.postgresHost
     keyVaultName: keyVault.outputs.keyVaultName
-  }
-}
-
-module webApp './linked-templates/web-app/azuredeploy.bicep' = {
-  name: 'webApp'
-  params: {
-    webAppName: webAppName
-    location: location
-    containerRegistry: containerRegistry.outputs.registryName
   }
 }
 

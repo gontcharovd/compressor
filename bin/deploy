@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 location=westeurope
-resourceGroupName=compressor
+backendResourceGroupName=compressorBackend
+frontendResourceGroupName=compressorFrontend
 
 dir=/home/denis/code/compressor
 
@@ -9,14 +10,18 @@ export $(grep -v '^#' ${dir}/secrets.env | xargs -0)
 
 az account set --name compressor
 
-echo "Creating resource group"
-az group create --location $location --resource-group $resourceGroupName
+echo "Creating backend resource group"
+az group create --location $location --resource-group $backendResourceGroupName
+
+echo "Creating frontend resource group"
+az group create --location $location --resource-group $frontendResourceGroupName
 
 echo "Deploying resources"
 az deployment group create \
-    --resource-group $resourceGroupName \
+    --resource-group $backendResourceGroupName \
     --template-file ${dir}/main.bicep \
     --parameters \
+        frontendResourceGroupName=$frontendResourceGroupName \
         cogniteClientIDValue=${CLIENT_ID} \
         cogniteClientSecretValue=${CLIENT_SECRET} \
         cogniteTenantIDValue=${TENANT_ID} \
