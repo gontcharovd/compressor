@@ -1,4 +1,3 @@
-param keyVaultName string
 param location string
 @secure()
 param cogniteClientIDValue string
@@ -13,6 +12,8 @@ param postgresPasswordValue string
 
 @description('Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. Get it by using Get-AzSubscription cmdlet.')
 param tenantId string = subscription().tenantId
+
+var keyVaultName = 'keyVault${uniqueString(resourceGroup().id)}'
 
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyVaultName

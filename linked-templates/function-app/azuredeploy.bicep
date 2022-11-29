@@ -1,13 +1,13 @@
-param appName string
 param location string
 param storageAccountType string = 'Standard_LRS'
 param appInsightsLocation string
 param postgresHost string
 param keyVaultName string
 
+var appName = 'functionApp${uniqueString(resourceGroup().id)}'
 var functionAppName = appName
-var hostingPlanName = appName
-var applicationInsightsName = appName
+var hostingPlanName = 'functionAppServicePlan${uniqueString(resourceGroup().id)}'
+var applicationInsightsName = 'funtionAppInsights${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'fappstorage${uniqueString(resourceGroup().id)}'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {

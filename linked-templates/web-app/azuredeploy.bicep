@@ -1,4 +1,3 @@
-param webAppName string
 param sku string = 'F1'
 param containerImage string = 'compressor'
 param containerImageTag string = 'latest'
@@ -6,11 +5,13 @@ param containerRegistry string
 param linuxFxVersion string = 'DOCKER|${containerRegistry}.azurecr.io/${containerImage}:${containerImageTag}'
 param location string
 
-var registryServerUrl = '${containerRegistry}.azurecr.io'
+// var registryServerUrl = '${containerRegistry}.azurecr.io'
+var webAppName = 'webbApp${uniqueString(resourceGroup().id)}'
+var webAppServicePlanName = 'webbAppServicePlan${uniqueString(resourceGroup().id)}'
 var webSiteName = toLower(webAppName)
 
 resource webAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
-  name: webAppName
+  name: webAppServicePlanName
   location: location
   properties: {
     reserved: true
@@ -77,13 +78,13 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
 //   }
 // }
 
-module webAppRA '../role-assignment/azuredeploy.bicep' = {
-  name: 'webApp'
-  params: {
-    managedIdentityId: webApp.identity.tenantId 
-    managedIdentityPrincipalId: webApp.identity.principalId
-    roleDefinitionIds: [
-      '7f951dda-4ed3-4680-a7ca-43fe172d538d'  // AcrPull
-    ]  
-  }
-}
+// module webAppRA '../role-assignment/azuredeploy.bicep' = {
+//   name: 'webApp'
+//   params: {
+//     managedIdentityId: webApp.identity.tenantId 
+//     managedIdentityPrincipalId: webApp.identity.principalId
+//     roleDefinitionIds: [
+//       '7f951dda-4ed3-4680-a7ca-43fe172d538d'  // AcrPull
+//     ]  
+//   }
+// }

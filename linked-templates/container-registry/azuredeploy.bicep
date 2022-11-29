@@ -1,5 +1,6 @@
-param containerRegistryName string
 param location string
+
+var containerRegistryName = 'containterregistry${uniqueString(resourceGroup().id)}'
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
   name: containerRegistryName

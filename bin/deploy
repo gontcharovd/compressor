@@ -12,9 +12,10 @@ az account set --name compressor
 
 echo "Deploying resources"
 az deployment sub create \
-    --name compressor
+    --name compressor \
     --template-file ${dir}/main.bicep \
     --parameters \
+        location=$location \
         frontendResourceGroupName=$frontendResourceGroupName \
         backendResourceGroupName=$backendResourceGroupName \
         cogniteClientIDValue=${CLIENT_ID} \

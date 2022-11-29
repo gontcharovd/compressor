@@ -1,4 +1,6 @@
-param location string = resourceGroup().location
+targetScope= 'subscription'
+
+param location string
 param frontendResourceGroupName string
 param backendResourceGroupName string
 
@@ -13,38 +15,21 @@ param postgresUserValue string
 @secure()
 param postgresPasswordValue string
 
-var webAppName = 'webbApp${uniqueString(frontendResourceGroupName)}'
-var containerRegistryName = 'containterregistry${uniqueString(frontendResourceGroupName)}'
-var keyVaultName = 'keyVault${uniqueString(resourceGroup().id)}'
-var functionAppName = 'functionApp${uniqueString(resourceGroup().id)}'
-@description('Postgres database name must be lowercase.')
-var postgresDatabaseName = 'postgresdatabase${uniqueString(resourceGroup().id)}'
-
-var subscriptionID = subscription().id
-
-module backendResourceGroup './linked-templates/resource-group/azuredeploy.bicep' = {
-  name: 'backendResourceGroup'
-  scope: subscription(subscriptionID)
-  params: {
-    resourceGroupName: backendResourceGroupName
-    location: location
-  }
+resource frontendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: frontendResourceGroupName
+  location: location
 }
 
-module frontendResourceGroup './linked-templates/resource-group/azuredeploy.bicep' = {
-  name: 'frontendResourceGroup'
-  scope: subscription(subscriptionID)
-  params: {
-    resourceGroupName: backendResourceGroupName
-    location: location
-  }
+resource backendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: backendResourceGroupName
+  location: location
 }
 
 module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
   name: 'keyVault'
+  scope: backendResourceGroup
   params: {
     location: location
-    keyVaultName: keyVaultName
     cogniteClientIDValue: cogniteClientIDValue
     cogniteClientSecretValue: cogniteClientSecretValue
     cogniteTenantIDValue: cogniteTenantIDValue
@@ -55,18 +40,16 @@ module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
 
 module containerRegistry './linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
-  scope: resourceGroup(frontendResourceGroup.name)
+  scope: frontendResourceGroup
   params: {
-    containerRegistryName: containerRegistryName
     location: location
   }
 }
 
 module webApp './linked-templates/web-app/azuredeploy.bicep' = {
   name: 'webApp'
-  scope: resourceGroup(frontendResourceGroup.name)
+  scope: frontendResourceGroup
   params: {
-    webAppName: webAppName
     location: location
     containerRegistry: containerRegistry.outputs.registryName
   }
@@ -74,11 +57,10 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
 
 module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
   name: 'functionApp'
-  scope: resourceGroup(backendResourceGroup.name)
+  scope: backendResourceGroup
   params: {
     location: location
     appInsightsLocation: location
-    appName: functionAppName
     postgresHost: postgresDatabase.outputs.postgresHost
     keyVaultName: keyVault.outputs.keyVaultName
   }
@@ -86,11 +68,10 @@ module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
 
 module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
   name: 'postgresDatabase'
-  scope: resourceGroup(backendResourceGroup.name)
+  scope: backendResourceGroup
   params: {
     location: location
     administratorLogin: postgresUserValue
     administratorLoginPassword: postgresPasswordValue
-    postgresDatabaseName: postgresDatabaseName
   }
 }

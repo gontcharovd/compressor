@@ -1,5 +1,4 @@
 param location string
-param postgresDatabaseName string
 param managedIdentityName string = 'postgresDeploymentScriptMI${uniqueString(resourceGroup().id)}'
 param virtualNetworkExternalId string = ''
 param subnetName string = ''
@@ -10,6 +9,9 @@ param currentTime string = utcNow()
 param administratorLogin string
 @secure()
 param administratorLoginPassword string
+
+@description('Postgres database name must be lowercase.')
+var postgresDatabaseName = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 
 resource postgresDatabase 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
   name: postgresDatabaseName
