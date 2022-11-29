@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
 param frontendResourceGroupName string
+param backendResourceGroupName string
 
 @secure()
 param cogniteClientIDValue string
@@ -19,6 +20,26 @@ var functionAppName = 'functionApp${uniqueString(resourceGroup().id)}'
 @description('Postgres database name must be lowercase.')
 var postgresDatabaseName = 'postgresdatabase${uniqueString(resourceGroup().id)}'
 
+var subscriptionID = subscription().id
+
+module backendResourceGroup './linked-templates/resource-group/azuredeploy.bicep' = {
+  name: 'backendResourceGroup'
+  scope: subscription(subscriptionID)
+  params: {
+    resourceGroupName: backendResourceGroupName
+    location: location
+  }
+}
+
+module frontendResourceGroup './linked-templates/resource-group/azuredeploy.bicep' = {
+  name: 'frontendResourceGroup'
+  scope: subscription(subscriptionID)
+  params: {
+    resourceGroupName: backendResourceGroupName
+    location: location
+  }
+}
+
 module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
   name: 'keyVault'
   params: {
@@ -34,7 +55,7 @@ module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
 
 module containerRegistry './linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
-  scope: resourceGroup(frontendResourceGroupName)
+  scope: resourceGroup(frontendResourceGroup.name)
   params: {
     containerRegistryName: containerRegistryName
     location: location
@@ -43,7 +64,7 @@ module containerRegistry './linked-templates/container-registry/azuredeploy.bice
 
 module webApp './linked-templates/web-app/azuredeploy.bicep' = {
   name: 'webApp'
-  scope: resourceGroup(frontendResourceGroupName)
+  scope: resourceGroup(frontendResourceGroup.name)
   params: {
     webAppName: webAppName
     location: location
@@ -53,6 +74,7 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
 
 module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
   name: 'functionApp'
+  scope: resourceGroup(backendResourceGroup.name)
   params: {
     location: location
     appInsightsLocation: location
@@ -64,6 +86,7 @@ module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
 
 module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
   name: 'postgresDatabase'
+  scope: resourceGroup(backendResourceGroup.name)
   params: {
     location: location
     administratorLogin: postgresUserValue
