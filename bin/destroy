@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 location=westeurope
-backendResourceGroupName=compressorBackend
-frontendResourceGroupName=compressorFrontend
+backendResourceGroupName=compressor-backend
+frontendResourceGroupName=compressor-frontend
 keyVaultName=keyVault7cwkv6diblxjy
 
 az account set --name compressor
