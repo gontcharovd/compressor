@@ -2,16 +2,16 @@ param containerImage string = 'minimal-shiny-app'
 param containerImageTag string = 'latest'
 param location string = 'westeurope'
 
-// define service names
+// define unique service names
 var webAppName = 'webbApp${uniqueString(resourceGroup().id)}'
 var webAppServicePlanName = 'webbAppServicePlan${uniqueString(resourceGroup().id)}'
 var webSiteName = toLower(webAppName)
 var containerRegistryName = 'containterregistry${uniqueString(resourceGroup().id)}'
 
-// derived variables
+// variables
+var roleDefinitionID =  '7f951dda-4ed3-4680-a7ca-43fe172d538d'  // AcrPull
 var linuxFxVersion = 'DOCKER|${containerRegistry.name}.azurecr.io/${containerImage}:${containerImageTag}'
 var registryServerUrl = '${containerRegistry.name}.azurecr.io'
-var roleDefinitionID =  '7f951dda-4ed3-4680-a7ca-43fe172d538d'  // AcrPull
 var roleAssignmentName= guid(roleDefinitionID, resourceGroup().id)
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
