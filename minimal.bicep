@@ -11,6 +11,8 @@ var containerRegistryName = 'containterregistry${uniqueString(resourceGroup().id
 // derived variables
 var linuxFxVersion = 'DOCKER|${containerRegistry.name}.azurecr.io/${containerImage}:${containerImageTag}'
 var registryServerUrl = '${containerRegistry.name}.azurecr.io'
+var roleDefinitionID =  '7f951dda-4ed3-4680-a7ca-43fe172d538d'  // AcrPull
+var roleAssignmentName= guid(roleDefinitionID, resourceGroup().id)
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
   name: containerRegistryName
@@ -53,12 +55,12 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
 }
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: 'webAppAcrPull'
+  name: roleAssignmentName
   scope: resourceGroup()
   properties: {
     description: 'AcrPull'
     principalId: webApp.identity.principalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionID)
     principalType: 'ServicePrincipal' // See https://docs.microsoft.com/azure/role-based-access-control/role-assignments-template#new-service-principal to understand why this property is included.
   }
 }
