@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+dir=/home/denis/code/compressor
+az account set --name compressor
+
+az group create --location westeurope --name compressor
+
+echo "Deploying resources"
+az deployment group create \
+    --resource-group compressor \
+    --template-file ${dir}/minimal.bicep

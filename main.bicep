@@ -20,23 +20,23 @@ resource frontendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' =
   location: location
 }
 
-resource backendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: backendResourceGroupName
-  location: location
-}
+// resource backendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+//   name: backendResourceGroupName
+//   location: location
+// }
 
-module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
-  name: 'keyVault'
-  scope: backendResourceGroup
-  params: {
-    location: location
-    cogniteClientIDValue: cogniteClientIDValue
-    cogniteClientSecretValue: cogniteClientSecretValue
-    cogniteTenantIDValue: cogniteTenantIDValue
-    postgresUserValue: postgresUserValue
-    postgresPasswordValue: postgresPasswordValue
-  }
-}
+// module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
+//   name: 'keyVault'
+//   scope: backendResourceGroup
+//   params: {
+//     location: location
+//     cogniteClientIDValue: cogniteClientIDValue
+//     cogniteClientSecretValue: cogniteClientSecretValue
+//     cogniteTenantIDValue: cogniteTenantIDValue
+//     postgresUserValue: postgresUserValue
+//     postgresPasswordValue: postgresPasswordValue
+//   }
+// }
 
 module containerRegistry './linked-templates/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
@@ -55,23 +55,23 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
   }
 }
 
-module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
-  name: 'functionApp'
-  scope: backendResourceGroup
-  params: {
-    location: location
-    appInsightsLocation: location
-    postgresHost: postgresDatabase.outputs.postgresHost
-    keyVaultName: keyVault.outputs.keyVaultName
-  }
-}
+// module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
+//   name: 'functionApp'
+//   scope: backendResourceGroup
+//   params: {
+//     location: location
+//     appInsightsLocation: location
+//     postgresHost: postgresDatabase.outputs.postgresHost
+//     keyVaultName: keyVault.outputs.keyVaultName
+//   }
+// }
 
-module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
-  name: 'postgresDatabase'
-  scope: backendResourceGroup
-  params: {
-    location: location
-    administratorLogin: postgresUserValue
-    administratorLoginPassword: postgresPasswordValue
-  }
-}
+// module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
+//   name: 'postgresDatabase'
+//   scope: backendResourceGroup
+//   params: {
+//     location: location
+//     administratorLogin: postgresUserValue
+//     administratorLoginPassword: postgresPasswordValue
+//   }
+// }

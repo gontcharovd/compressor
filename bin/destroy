@@ -5,9 +5,10 @@ frontendResourceGroupName=compressor-frontend
 keyVaultName=keyVaultepq74eywt4twa
 
 az account set --name compressor
-echo "Deleting backend resource group"
-az group delete --resource-group $backendResourceGroupName --yes
+# echo "Deleting backend resource group"
+# az group delete --resource-group $backendResourceGroupName --yes
+# echo "Purging Key Vault"
+# az keyvault purge --name ${keyVaultName} --location $location 
+
 echo "Deleting frontend resource group"
 az group delete --resource-group $frontendResourceGroupName --yes
-echo "Purging Key Vault"
-az keyvault purge --name ${keyVaultName} --location $location 

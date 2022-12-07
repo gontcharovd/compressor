@@ -40,24 +40,6 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   }
 }
 
-// resource ftpPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-03-01' = {
-//   name: 'ftp'
-//   kind: 'string'
-//   parent: webApp
-//   properties: {
-//     allow: true
-//   }
-// }
-
-// resource scmPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-03-01' = {
-//   name: 'scm'
-//   kind: 'string'
-//   parent: webApp
-//   properties: {
-//     allow: true
-//   }
-// }
-
 // resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
 //   name: 'web'
 //   parent: webApp
@@ -68,6 +50,8 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
 //       containerConfiguration: {
 //         imageName: containerImage
 //         serverUrl: registryServerUrl
+//         username: containerRegistry
+//         password: 'DOH8dDDKdoB6ESEmeGrnmubdJR1AfmRD3xJxpS73ME+ACRDabmFD'
 //       }
 //       generateWorkflowFile: true
 //       isLinux: true
