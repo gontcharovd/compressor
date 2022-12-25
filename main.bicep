@@ -38,22 +38,15 @@ resource frontendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' =
 //   }
 // }
 
-module containerRegistry './modules/container-registry/azuredeploy.bicep' = {
-  name: 'containerRegistry'
+module webApp './modules/web-app/azuredeploy.bicep' = {
+  name: 'webApp'
   scope: frontendResourceGroup
   params: {
     location: location
+    postgresUserValue: postgresUserValue
+    postgresPasswordValue: postgresPasswordValue
   }
 }
-
-// module webApp './modules/web-app/azuredeploy.bicep' = {
-//   name: 'webApp'
-//   scope: frontendResourceGroup
-//   params: {
-//     location: location
-//     containerRegistry: containerRegistry.outputs.registryName
-//   }
-// }
 
 // module functionApp './modules/function-app/azuredeploy.bicep' = {
 //   name: 'functionApp'
