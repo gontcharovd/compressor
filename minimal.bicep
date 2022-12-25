@@ -1,5 +1,3 @@
-param containerImage string = 'minimal-shiny-app'
-param containerImageTag string = 'latest'
 param location string = 'westeurope'
 
 // define unique service names
@@ -9,10 +7,8 @@ var webSiteName = toLower(webAppName)
 var containerRegistryName = 'containterregistry${uniqueString(resourceGroup().id)}'
 
 // variables
-var roleDefinitionID =  '7f951dda-4ed3-4680-a7ca-43fe172d538d'  // AcrPull
-var linuxFxVersion = 'DOCKER|${containerRegistry.name}.azurecr.io/${containerImage}:${containerImageTag}'
-var registryServerUrl = '${containerRegistry.name}.azurecr.io'
-var roleAssignmentName= guid(roleDefinitionID, resourceGroup().id)
+var containerImage = 'compressor/minimal'
+var linuxFxVersion = 'DOCKER|${buildContainerImage.outputs.acrImage}'
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
   name: containerRegistryName
@@ -32,6 +28,7 @@ resource webAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
     reserved: true
   }
   sku: {
+    tier: 'Free'
     name: 'F1'
   }
   kind: 'linux'
@@ -40,49 +37,49 @@ resource webAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
 resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webSiteName
   location: location
-  kind: 'app,linux,container'
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: {
     reserved: true
     serverFarmId: webAppServicePlan.id
+    httpsOnly: true
+    clientAffinityEnabled: false
     siteConfig: {
       linuxFxVersion: linuxFxVersion
-      acrUseManagedIdentityCreds: true
+      ftpsState: 'FtpsOnly'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      appSettings: [
+        {
+          name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
+          value: 'false'
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_URL'
+          value: 'https://${containerRegistry.name}.azurecr.io'
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_USERNAME'
+          value: containerRegistry.name
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
+          value: listCredentials(containerRegistry.id, containerRegistry.apiVersion).passwords[0].value
+        }
+        {
+          name: 'WEBSITES_PORT'
+          value: '8080'
+        }
+      ]
     }
   }
 }
 
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: roleAssignmentName
-  scope: resourceGroup()
-  properties: {
-    description: 'AcrPull'
-    principalId: webApp.identity.principalId
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionID)
-    principalType: 'ServicePrincipal' // See https://docs.microsoft.com/azure/role-based-access-control/role-assignments-template#new-service-principal to understand why this property is included.
-  }
-}
-
-resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
-  name: 'web'
-  parent: webApp
-  properties: {
-    branch: 'main'
-    deploymentRollbackEnabled: false
-    gitHubActionConfiguration: {
-      containerConfiguration: {
-        imageName: containerImage
-        serverUrl: registryServerUrl
-        username: containerRegistry.name
-        password: 'thisIsNotARealPassword'
-      }
-      generateWorkflowFile: true
-      isLinux: true
-    }
-    isGitHubAction: true
-    isManualIntegration: false
-    repoUrl: 'https://github.com/gontcharovd/minimal-shiny-app'
+module buildContainerImage 'br/public:deployment-scripts/build-acr:1.0.1' = {
+  name: 'buildContainerImage'
+  params: {
+    AcrName: containerRegistry.name
+    location: location
+    gitRepositoryUrl:  'https://github.com/gontcharovd/minimal-shiny-app'
+    gitRepoDirectory:  '.'
+    imageName: containerImage
   }
 }
