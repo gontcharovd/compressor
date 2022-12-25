@@ -25,7 +25,7 @@ resource frontendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' =
 //   location: location
 // }
 
-// module keyVault './linked-templates/key-vault/azuredeploy.bicep' = {
+// module keyVault './modules/key-vault/azuredeploy.bicep' = {
 //   name: 'keyVault'
 //   scope: backendResourceGroup
 //   params: {
@@ -38,7 +38,7 @@ resource frontendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' =
 //   }
 // }
 
-module containerRegistry './linked-templates/container-registry/azuredeploy.bicep' = {
+module containerRegistry './modules/container-registry/azuredeploy.bicep' = {
   name: 'containerRegistry'
   scope: frontendResourceGroup
   params: {
@@ -46,16 +46,16 @@ module containerRegistry './linked-templates/container-registry/azuredeploy.bice
   }
 }
 
-module webApp './linked-templates/web-app/azuredeploy.bicep' = {
-  name: 'webApp'
-  scope: frontendResourceGroup
-  params: {
-    location: location
-    containerRegistry: containerRegistry.outputs.registryName
-  }
-}
+// module webApp './modules/web-app/azuredeploy.bicep' = {
+//   name: 'webApp'
+//   scope: frontendResourceGroup
+//   params: {
+//     location: location
+//     containerRegistry: containerRegistry.outputs.registryName
+//   }
+// }
 
-// module functionApp './linked-templates/function-app/azuredeploy.bicep' = {
+// module functionApp './modules/function-app/azuredeploy.bicep' = {
 //   name: 'functionApp'
 //   scope: backendResourceGroup
 //   params: {
@@ -66,7 +66,7 @@ module webApp './linked-templates/web-app/azuredeploy.bicep' = {
 //   }
 // }
 
-// module postgresDatabase './linked-templates/postgres-database/azuredeploy.bicep' = {
+// module postgresDatabase './modules/postgres-database/azuredeploy.bicep' = {
 //   name: 'postgresDatabase'
 //   scope: backendResourceGroup
 //   params: {
