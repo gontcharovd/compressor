@@ -104,7 +104,7 @@ module buildContainerImage 'br/public:deployment-scripts/build-acr:1.0.1' = {
   params: {
     AcrName: containerRegistry.name
     location: location
-    gitRepositoryUrl: 'https://github.com/gontcharovd/minimal-shiny-app'
+    gitRepositoryUrl: 'https://github.com/gontcharovd/compressor-shiny-app'
     gitRepoDirectory: '.'
     imageName: containerImage
   }
