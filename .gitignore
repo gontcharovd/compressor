@@ -3,3 +3,4 @@ deploy-pipeline.sh
 secrets.env
 sql/
 main.json
+bicep/
