@@ -72,7 +72,7 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
         }
         {
           name: 'WEBSITES_PORT'
-          value: '8080'
+          value: '8501'
         }
         {
           name: 'DB_USER'
@@ -104,7 +104,7 @@ module buildContainerImage 'br/public:deployment-scripts/build-acr:1.0.1' = {
   params: {
     AcrName: containerRegistry.name
     location: location
-    gitRepositoryUrl: 'https://github.com/gontcharovd/compressor-shiny-app'
+    gitRepositoryUrl: 'https://github.com/gontcharovd/compressor-streamlit'
     gitRepoDirectory: '.'
     imageName: containerImage
   }
