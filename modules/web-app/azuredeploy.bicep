@@ -1,6 +1,6 @@
 param location string = 'westeurope'
 param postgresName string = 'postgres'
-param postgresHost string = 'postgrespostgres7cwkv6diblxjy.postgres.database.azure.com'
+param postgresHost string = 'postgres7cwkv6diblxjy.postgres.database.azure.com'
 param postgresPort string = '5432'
 @secure()
 param postgresUserValue string
