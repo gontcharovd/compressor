@@ -20,23 +20,23 @@ resource frontendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' =
   location: location
 }
 
-resource backendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: backendResourceGroupName
-  location: location
-}
+// resource backendResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+//   name: backendResourceGroupName
+//   location: location
+// }
 
-module keyVault './modules/key-vault/azuredeploy.bicep' = {
-  name: 'keyVault'
-  scope: backendResourceGroup
-  params: {
-    location: location
-    cogniteClientIDValue: cogniteClientIDValue
-    cogniteClientSecretValue: cogniteClientSecretValue
-    cogniteTenantIDValue: cogniteTenantIDValue
-    postgresUserValue: postgresUserValue
-    postgresPasswordValue: postgresPasswordValue
-  }
-}
+// module keyVault './modules/key-vault/azuredeploy.bicep' = {
+//   name: 'keyVault'
+//   scope: backendResourceGroup
+//   params: {
+//     location: location
+//     cogniteClientIDValue: cogniteClientIDValue
+//     cogniteClientSecretValue: cogniteClientSecretValue
+//     cogniteTenantIDValue: cogniteTenantIDValue
+//     postgresUserValue: postgresUserValue
+//     postgresPasswordValue: postgresPasswordValue
+//   }
+// }
 
 module webApp './modules/web-app/azuredeploy.bicep' = {
   name: 'webApp'
@@ -48,23 +48,23 @@ module webApp './modules/web-app/azuredeploy.bicep' = {
   }
 }
 
-module functionApp './modules/function-app/azuredeploy.bicep' = {
-  name: 'functionApp'
-  scope: backendResourceGroup
-  params: {
-    location: location
-    appInsightsLocation: location
-    postgresHost: postgresDatabase.outputs.postgresHost
-    keyVaultName: keyVault.outputs.keyVaultName
-  }
-}
+// module functionApp './modules/function-app/azuredeploy.bicep' = {
+//   name: 'functionApp'
+//   scope: backendResourceGroup
+//   params: {
+//     location: location
+//     appInsightsLocation: location
+//     postgresHost: postgresDatabase.outputs.postgresHost
+//     keyVaultName: keyVault.outputs.keyVaultName
+//   }
+// }
 
-module postgresDatabase './modules/postgres-database/azuredeploy.bicep' = {
-  name: 'postgresDatabase'
-  scope: backendResourceGroup
-  params: {
-    location: location
-    administratorLogin: postgresUserValue
-    administratorLoginPassword: postgresPasswordValue
-  }
-}
+// module postgresDatabase './modules/postgres-database/azuredeploy.bicep' = {
+//   name: 'postgresDatabase'
+//   scope: backendResourceGroup
+//   params: {
+//     location: location
+//     administratorLogin: postgresUserValue
+//     administratorLoginPassword: postgresPasswordValue
+//   }
+// }

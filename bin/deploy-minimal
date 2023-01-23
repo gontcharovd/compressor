@@ -2,9 +2,9 @@
 dir=/home/denis/code/compressor
 az account set --name compressor
 
-az group create --location westeurope --name compressor
+az group create --location westeurope --name compressor-minimal
 
 echo "Deploying resources"
 az deployment group create \
-    --resource-group compressor \
+    --resource-group compressor-minimal \
     --template-file ${dir}/minimal.bicep
