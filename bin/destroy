@@ -2,9 +2,9 @@
 location=westeurope
 backendResourceGroupName=compressor-backend
 frontendResourceGroupName=compressor-frontend
-keyVaultName=keyVaultepq74eywt4twa
+keyVaultName=keyVaultpyryevaui6ocg
 
-az account set --name compressor
+az account set --name free-trial
 echo "Deleting backend resource group"
 az group delete --resource-group $backendResourceGroupName --yes
 echo "Purging Key Vault"

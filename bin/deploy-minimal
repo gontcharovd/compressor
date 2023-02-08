@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 dir=/home/denis/code/compressor
-az account set --name compressor
+az account set --name free-trial
 
 az group create --location westeurope --name compressor-minimal
 

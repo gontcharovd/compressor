@@ -8,7 +8,7 @@ dir=/home/denis/code/compressor
 echo "Loading secrets from .env file"
 export $(grep -v '^#' ${dir}/secrets.env | xargs -0)
 
-az account set --name compressor
+az account set --name free-trial
 
 echo "Deploying resources"
 az deployment sub create \
